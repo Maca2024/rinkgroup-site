@@ -1,78 +1,118 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import Image from 'next/image';
 import { ParticleLaurel } from './ParticleLaurel';
 
 export function HeroSection() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  });
+
+  const logoScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.7]);
+  const logoOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const logoY = useTransform(scrollYProgress, [0, 0.5], [0, -60]);
+  const overlayOpacity = useTransform(scrollYProgress, [0.3, 0.8], [0, 1]);
+
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-      {/* Deep radial gradient background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(ellipse 60% 50% at 50% 40%, rgba(28, 48, 88, 0.6) 0%, transparent 70%),
-            radial-gradient(ellipse 80% 60% at 50% 100%, rgba(197, 149, 107, 0.05) 0%, transparent 50%),
-            linear-gradient(180deg, #0B1629 0%, #142242 50%, #0B1629 100%)
-          `,
-        }}
-      />
-
-      {/* Particle laurel wreath */}
-      <ParticleLaurel />
-
-      {/* Logo image */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 2, ease: [0.25, 0.1, 0.25, 1] }}
-        className="relative z-10 mb-8"
-      >
-        <Image
-          src="/logo-rinkgroup.png"
-          alt="Rink Group"
-          width={500}
-          height={350}
-          priority
-          className="w-64 md:w-80 lg:w-[420px] h-auto drop-shadow-[0_0_60px_rgba(197,149,107,0.15)]"
+    <section ref={ref} className="relative h-[140vh]">
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden vignette">
+        {/* Deep cinematic gradient */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(ellipse 50% 45% at 50% 38%, rgba(28, 48, 88, 0.5) 0%, transparent 70%),
+              radial-gradient(ellipse 100% 40% at 50% 110%, rgba(197, 149, 107, 0.03) 0%, transparent 50%),
+              radial-gradient(ellipse 40% 30% at 20% 20%, rgba(28, 48, 88, 0.3) 0%, transparent 60%),
+              radial-gradient(ellipse 40% 30% at 80% 70%, rgba(28, 48, 88, 0.2) 0%, transparent 60%),
+              linear-gradient(180deg, #080E1A 0%, #0F1B33 40%, #142242 60%, #0F1B33 80%, #080E1A 100%)
+            `,
+          }}
         />
-      </motion.div>
 
-      {/* Tagline */}
-      <motion.p
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, delay: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
-        className="relative z-10 font-[family-name:var(--font-sans)] text-sm md:text-base tracking-[0.3em] uppercase text-cream/40 text-center px-6"
-      >
-        Strategic Ventures &middot; Nordic Heritage &middot; Global Ambition
-      </motion.p>
+        {/* Particle wreath */}
+        <ParticleLaurel />
 
-      {/* Gold divider */}
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 1.5, delay: 1.6, ease: [0.25, 0.1, 0.25, 1] }}
-        className="relative z-10 gold-line w-32 md:w-48 mt-8"
-      />
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.5 }}
-        className="absolute bottom-10 z-10 flex flex-col items-center gap-2"
-      >
-        <span className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.4em] uppercase text-cream/25">
-          Discover
-        </span>
+        {/* Logo with parallax */}
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-px h-8 bg-gradient-to-b from-rose-gold/40 to-transparent"
+          style={{ scale: logoScale, opacity: logoOpacity, y: logoY }}
+          className="relative z-10"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85, filter: 'blur(20px)' }}
+            animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+            transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Image
+              src="/logo-rinkgroup.png"
+              alt="Rink Group — Lumen Felicis"
+              width={500}
+              height={350}
+              priority
+              className="w-56 md:w-72 lg:w-96 h-auto drop-shadow-[0_0_80px_rgba(197,149,107,0.12)]"
+            />
+          </motion.div>
+        </motion.div>
+
+        {/* Tagline */}
+        <motion.div
+          style={{ opacity: logoOpacity }}
+          className="relative z-10 mt-10 flex flex-col items-center"
+        >
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.5, delay: 1.8, ease: [0.16, 1, 0.3, 1] }}
+            className="gold-line w-20 md:w-32 mb-8"
+          />
+
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 2.2 }}
+            className="font-[family-name:var(--font-sans)] text-[10px] md:text-xs tracking-[0.4em] uppercase text-cream/30 text-center px-6"
+          >
+            Strategic Ventures &middot; Nordic Heritage &middot; Global Ambition
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 2.6 }}
+            className="font-[family-name:var(--font-serif)] text-base md:text-lg text-cream/20 italic mt-4"
+          >
+            Est. Finland &mdash; Netherlands
+          </motion.p>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 3.5 }}
+          style={{ opacity: logoOpacity }}
+          className="absolute bottom-8 md:bottom-12 z-10 flex flex-col items-center"
+        >
+          <span className="font-[family-name:var(--font-sans)] text-[9px] tracking-[0.5em] uppercase text-cream/15 mb-3">
+            Scroll
+          </span>
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-px h-10 bg-gradient-to-b from-rose-gold/30 to-transparent"
+          />
+        </motion.div>
+
+        {/* Scroll fade overlay */}
+        <motion.div
+          style={{ opacity: overlayOpacity }}
+          className="absolute inset-0 bg-navy-deep z-20 pointer-events-none"
         />
-      </motion.div>
+      </div>
     </section>
   );
 }

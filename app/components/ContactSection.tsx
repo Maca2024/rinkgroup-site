@@ -1,61 +1,87 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import Image from 'next/image';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export function ContactSection() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  const circleScale = useTransform(scrollYProgress, [0.2, 0.7], [0, 1.5]);
+  const circleOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8], [0, 0.04, 0]);
+
   return (
-    <section id="contact" className="relative py-32 md:py-48 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-navy-deep to-navy-deep" />
+    <section id="contact" ref={ref} className="relative py-40 md:py-56 overflow-hidden">
+      {/* Expanding radial behind */}
+      <motion.div
+        style={{ scale: circleScale, opacity: circleOpacity }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
+        aria-hidden
+      >
+        <div className="w-full h-full rounded-full border border-rose-gold" />
+      </motion.div>
 
-      {/* Decorative radial */}
-      <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] opacity-[0.03]"
-        style={{ background: 'radial-gradient(ellipse at center bottom, #C5956B, transparent 70%)' }}
-      />
-
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+        <motion.span
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="text-center"
+          className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.5em] uppercase text-rose-gold/40 block mb-8"
         >
-          <span className="font-[family-name:var(--font-sans)] text-[11px] tracking-[0.4em] uppercase text-rose-gold/60 block mb-8">
-            Connect
+          Connect
+        </motion.span>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.1 }}
+          className="font-[family-name:var(--font-display)] text-4xl md:text-6xl lg:text-7xl font-light text-cream leading-[1.1] mb-6"
+        >
+          Begin the <span className="text-rose-gradient italic">conversation</span>
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.25 }}
+          className="font-[family-name:var(--font-serif)] text-lg md:text-xl text-cream/30 max-w-md mx-auto mb-14"
+        >
+          For partnership inquiries, investment opportunities, or strategic collaboration.
+        </motion.p>
+
+        {/* CTA */}
+        <motion.a
+          href="mailto:info@rinkgroup.io"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          className="inline-flex items-center gap-5 px-12 py-6 border border-rose-gold/20 hover:border-rose-gold/50 hover:bg-rose-gold/[0.03] transition-all duration-700 group magnetic-glow"
+          data-magnetic
+        >
+          <span className="font-[family-name:var(--font-sans)] text-sm tracking-[0.25em] uppercase text-rose-gold-light/80 group-hover:text-rose-gold-pale transition-colors duration-500">
+            info@rinkgroup.io
           </span>
-
-          <h2 className="font-[family-name:var(--font-display)] text-4xl md:text-6xl lg:text-7xl font-light text-cream leading-[1.1] mb-6">
-            Begin the
-            <span className="text-rose-gradient italic"> conversation</span>
-          </h2>
-
-          <p className="font-[family-name:var(--font-serif)] text-lg text-cream/40 max-w-lg mx-auto mb-14">
-            For partnership inquiries, investment opportunities, or strategic collaboration.
-          </p>
-
-          {/* Contact email */}
-          <motion.a
-            href="mailto:info@rinkgroup.io"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center gap-4 px-10 py-5 border border-rose-gold/30 hover:border-rose-gold/60 hover:bg-rose-gold/[0.04] rounded-none transition-all duration-500 group"
+          <svg
+            className="w-4 h-4 text-rose-gold/40 group-hover:text-rose-gold group-hover:translate-x-1.5 transition-all duration-500"
+            fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}
           >
-            <span className="font-[family-name:var(--font-sans)] text-sm tracking-[0.2em] uppercase text-rose-gold-light group-hover:text-rose-gold-pale transition-colors">
-              info@rinkgroup.io
-            </span>
-            <svg
-              className="w-4 h-4 text-rose-gold/50 group-hover:text-rose-gold group-hover:translate-x-1 transition-all duration-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-            </svg>
-          </motion.a>
-        </motion.div>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+          </svg>
+        </motion.a>
+
+        {/* Ornamental bottom */}
+        <div className="ornament max-w-xs mx-auto mt-20">
+          <span className="font-[family-name:var(--font-serif)] text-rose-gold/10 text-xs">✦</span>
+        </div>
       </div>
     </section>
   );

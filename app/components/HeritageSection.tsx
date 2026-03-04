@@ -4,10 +4,10 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 const values = [
-  { latin: 'Prudentia', english: 'Prudence', description: 'We measure twice and act with conviction. Strategic patience is our competitive advantage.' },
-  { latin: 'Integritas', english: 'Integrity', description: 'Our word is our bond. In every jurisdiction, every partnership, every handshake.' },
-  { latin: 'Fortitudo', english: 'Fortitude', description: 'We build for decades, not quarters. True wealth compounds through resilience.' },
-  { latin: 'Humanitas', english: 'Humanity', description: 'Technology serves people. Nature nurtures people. Business connects people.' },
+  { latin: 'Prudentia', english: 'Prudence', icon: '◈', text: 'We measure twice and act with conviction. Strategic patience is our competitive advantage.' },
+  { latin: 'Integritas', english: 'Integrity', icon: '◇', text: 'Our word is our bond. In every jurisdiction, every partnership, every handshake.' },
+  { latin: 'Fortitudo', english: 'Fortitude', icon: '△', text: 'We build for decades, not quarters. True wealth compounds through resilience.' },
+  { latin: 'Humanitas', english: 'Humanity', icon: '○', text: 'Technology serves people. Nature nurtures people. Business connects people.' },
 ];
 
 export function HeritageSection() {
@@ -17,82 +17,97 @@ export function HeritageSection() {
     offset: ['start end', 'end start'],
   });
 
-  const textY = useTransform(scrollYProgress, [0, 1], [40, -40]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
+  const quoteY = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const lineScale = useTransform(scrollYProgress, [0.1, 0.4], [0, 1]);
 
   return (
     <section id="heritage" ref={sectionRef} className="relative py-32 md:py-48 overflow-hidden">
-      {/* Background treatment */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-navy-deep via-navy-light/20 to-navy-deep" />
-        {/* Decorative border pattern */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-gradient-to-b from-transparent via-rose-gold/[0.06] to-transparent" />
-      </div>
+      {/* Central vertical line */}
+      <motion.div
+        style={{ scaleY: lineScale, transformOrigin: 'top' }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-gradient-to-b from-transparent via-rose-gold/[0.08] to-transparent"
+      />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Header with parallax quote */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 1 }}
-          className="text-center mb-24 md:mb-32"
-        >
-          <span className="font-[family-name:var(--font-sans)] text-[11px] tracking-[0.4em] uppercase text-rose-gold/60 block mb-8">
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
+        {/* Quote */}
+        <motion.div className="text-center mb-32 md:mb-40" style={{ y: quoteY }}>
+          <motion.span
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.5em] uppercase text-rose-gold/40 block mb-10"
+          >
             Our Heritage
-          </span>
+          </motion.span>
 
-          <motion.blockquote style={{ y: textY }} className="max-w-3xl mx-auto">
-            <p className="font-[family-name:var(--font-serif)] text-2xl md:text-4xl lg:text-5xl text-cream/80 leading-[1.3] font-light italic">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, delay: 0.2 }}
+          >
+            <p className="font-[family-name:var(--font-display)] text-5xl md:text-7xl lg:text-8xl text-rose-gradient italic font-light">
               &ldquo;Lumen Felicis&rdquo;
             </p>
-            <p className="font-[family-name:var(--font-serif)] text-lg md:text-xl text-cream/40 mt-4">
-              The Light of Fortune &mdash; our founding principle since establishment
+            <p className="font-[family-name:var(--font-serif)] text-lg md:text-xl text-cream/25 mt-6 tracking-wide">
+              The Light of Fortune
             </p>
-          </motion.blockquote>
+          </motion.div>
 
-          <div className="gold-line w-16 mx-auto mt-12" />
+          <div className="ornament max-w-xs mx-auto mt-12">
+            <span className="font-[family-name:var(--font-serif)] text-rose-gold/20 text-xs tracking-[0.3em]">✦</span>
+          </div>
         </motion.div>
 
-        {/* Values grid */}
-        <div className="grid md:grid-cols-2 gap-px bg-rose-gold/[0.06] max-w-4xl mx-auto">
-          {values.map((value, i) => (
+        {/* Values — staggered asymmetric layout */}
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+          {values.map((v, i) => (
             <motion.div
-              key={value.latin}
-              initial={{ opacity: 0, y: 30 }}
+              key={v.latin}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.7, delay: i * 0.12 }}
-              className="bg-navy-deep p-10 md:p-14 group hover:bg-navy/50 transition-colors duration-700"
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className={`group relative p-8 md:p-12 border border-rose-gold/[0.05] hover:border-rose-gold/[0.12] transition-all duration-700 magnetic-glow ${
+                i % 2 === 1 ? 'md:mt-16' : ''
+              }`}
             >
-              <span className="font-[family-name:var(--font-display)] text-xl md:text-2xl text-rose-gold-light italic block mb-1">
-                {value.latin}
+              {/* Corner ornament */}
+              <span className="absolute top-3 right-4 font-[family-name:var(--font-serif)] text-lg text-rose-gold/[0.08] group-hover:text-rose-gold/20 transition-colors duration-700">
+                {v.icon}
               </span>
-              <span className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.3em] uppercase text-cream/25 block mb-5">
-                {value.english}
+
+              <span className="font-[family-name:var(--font-display)] text-2xl md:text-3xl text-rose-gold-light/80 italic block mb-1">
+                {v.latin}
               </span>
-              <p className="font-[family-name:var(--font-serif)] text-base text-cream/40 leading-relaxed group-hover:text-cream/60 transition-colors duration-500">
-                {value.description}
+              <span className="font-[family-name:var(--font-sans)] text-[9px] tracking-[0.35em] uppercase text-cream/20 block mb-6">
+                {v.english}
+              </span>
+              <p className="font-[family-name:var(--font-serif)] text-base md:text-lg text-cream/35 leading-relaxed group-hover:text-cream/55 transition-colors duration-500">
+                {v.text}
               </p>
             </motion.div>
           ))}
         </div>
 
-        {/* Locations */}
+        {/* Locations with connecting dots */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="flex flex-wrap justify-center gap-8 md:gap-16 mt-24 md:mt-32"
+          transition={{ duration: 1, delay: 0.5 }}
+          className="flex items-center justify-center gap-4 md:gap-8 mt-28 md:mt-36"
         >
           {['Helsinki', 'Amsterdam', 'Kuusamo'].map((city, i) => (
-            <div key={city} className="text-center">
-              <span className="font-[family-name:var(--font-display)] text-lg md:text-xl text-cream/30">
-                {city}
-              </span>
+            <div key={city} className="flex items-center gap-4 md:gap-8">
+              <div className="text-center">
+                <span className="font-[family-name:var(--font-display)] text-base md:text-lg text-cream/20 hover:text-rose-gold/40 transition-colors duration-500">
+                  {city}
+                </span>
+              </div>
               {i < 2 && (
-                <span className="hidden md:inline-block ml-8 md:ml-16 text-rose-gold/20">&middot;</span>
+                <span className="text-rose-gold/10 text-[8px]">◆</span>
               )}
             </div>
           ))}

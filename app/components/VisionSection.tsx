@@ -3,103 +3,102 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-const pillars = [
-  {
-    number: '01',
-    title: 'Technology',
-    subtitle: 'AetherLink B.V.',
-    description: 'AI consulting and intelligent automation. We architect the systems that transform enterprises into adaptive, self-optimizing organisms.',
-    accent: 'from-rose-gold to-rose-gold-light',
-  },
-  {
-    number: '02',
-    title: 'Ventures',
-    subtitle: 'Nordic Innovation',
-    description: 'Strategic investments in sustainable technology, eco-tourism, and educational innovation across the Finnish-Dutch corridor.',
-    accent: 'from-rose-gold-light to-rose-gold-pale',
-  },
-  {
-    number: '03',
-    title: 'Heritage',
-    subtitle: 'TaigaSchool',
-    description: 'Preserving Nordic wilderness while pioneering regenerative hospitality. Where ancient forests meet contemporary sanctuary.',
-    accent: 'from-rose-gold-pale to-cream-dark',
-  },
-];
+const words = 'Building legacies that transcend generations'.split(' ');
 
 export function VisionSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ['start end', 'end start'],
+    offset: ['start 0.8', 'start 0.2'],
   });
 
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, -80]);
-
   return (
-    <section id="vision" ref={sectionRef} className="relative py-32 md:py-48 overflow-hidden">
-      {/* Parallax background accent */}
-      <motion.div
-        style={{ y: bgY }}
-        className="absolute top-0 right-0 w-1/2 h-full opacity-[0.03]"
-      >
-        <div className="w-full h-full bg-gradient-to-l from-rose-gold to-transparent" />
-      </motion.div>
-
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 1 }}
-          className="mb-24 md:mb-32"
-        >
-          <span className="font-[family-name:var(--font-sans)] text-[11px] tracking-[0.4em] uppercase text-rose-gold/60 block mb-4">
+    <section ref={sectionRef} className="relative py-32 md:py-48">
+      <div className="max-w-6xl mx-auto px-6">
+        {/* Scroll-revealed heading */}
+        <div className="mb-8">
+          <span className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.5em] uppercase text-rose-gold/40 block mb-8">
             Our Philosophy
           </span>
-          <h2 className="font-[family-name:var(--font-display)] text-4xl md:text-6xl lg:text-7xl font-light text-cream leading-[1.1] max-w-4xl">
-            Building legacies that
-            <span className="text-rose-gradient italic"> transcend </span>
-            generations
-          </h2>
-          <div className="gold-line w-24 mt-10" />
-        </motion.div>
+        </div>
 
-        {/* Pillars */}
-        <div className="grid gap-16 md:gap-0 md:grid-cols-3">
-          {pillars.map((pillar, i) => (
-            <motion.article
-              key={pillar.number}
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.8, delay: i * 0.15, ease: [0.25, 0.1, 0.25, 1] }}
-              className={`relative group ${i > 0 ? 'md:border-l md:border-rose-gold/10 md:pl-10' : ''}`}
-            >
-              {/* Number */}
-              <span className="font-[family-name:var(--font-serif)] text-7xl md:text-8xl font-light text-rose-gold/[0.07] absolute -top-4 -left-2 select-none">
-                {pillar.number}
-              </span>
+        <h2 className="flex flex-wrap gap-x-4 md:gap-x-6 font-[family-name:var(--font-display)] text-4xl md:text-6xl lg:text-8xl font-light leading-[1.15] mb-6">
+          {words.map((word, i) => {
+            const start = i / words.length;
+            const end = start + 1 / words.length;
 
-              <div className="relative">
-                <h3 className="font-[family-name:var(--font-display)] text-2xl md:text-3xl text-cream mb-1">
-                  {pillar.title}
-                </h3>
-                <p className="font-[family-name:var(--font-sans)] text-xs tracking-[0.2em] uppercase text-rose-gold/60 mb-6">
-                  {pillar.subtitle}
-                </p>
-                <p className="font-[family-name:var(--font-serif)] text-lg text-cream/50 leading-relaxed max-w-sm">
-                  {pillar.description}
-                </p>
+            return (
+              <ScrollWord
+                key={i}
+                word={word}
+                range={[start, end]}
+                progress={scrollYProgress}
+                isAccent={word === 'transcend'}
+              />
+            );
+          })}
+        </h2>
 
-                {/* Hover accent line */}
-                <div className={`h-px w-0 group-hover:w-16 bg-gradient-to-r ${pillar.accent} transition-all duration-700 mt-8`} />
-              </div>
-            </motion.article>
-          ))}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          className="gold-line w-24 origin-left mt-10 mb-20"
+        />
+
+        {/* Philosophy body */}
+        <div className="grid md:grid-cols-2 gap-16 md:gap-24">
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8 }}
+            className="font-[family-name:var(--font-serif)] text-xl md:text-2xl text-cream/50 leading-relaxed"
+          >
+            Rink Group operates at the intersection of Nordic innovation and time-tested principles.
+            We don&apos;t chase trends — we build structures that compound value across decades,
+            jurisdictions, and generations.
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, delay: 0.15 }}
+            className="font-[family-name:var(--font-serif)] text-xl md:text-2xl text-cream/50 leading-relaxed"
+          >
+            From the ancient taiga forests of Finland to the trading floors of Amsterdam,
+            our portfolio reflects a singular conviction: that the greatest returns flow
+            from patience, integrity, and the courage to think in centuries.
+          </motion.p>
         </div>
       </div>
     </section>
+  );
+}
+
+function ScrollWord({
+  word,
+  range,
+  progress,
+  isAccent,
+}: {
+  word: string;
+  range: [number, number];
+  progress: ReturnType<typeof useScroll>['scrollYProgress'];
+  isAccent: boolean;
+}) {
+  const opacity = useTransform(progress, range, [0.08, 1]);
+  const y = useTransform(progress, range, [30, 0]);
+  const blur = useTransform(progress, range, [8, 0]);
+
+  return (
+    <motion.span
+      style={{ opacity, y, filter: blur.get() > 0.5 ? `blur(${blur}px)` : undefined }}
+      className={isAccent ? 'text-rose-gradient italic' : 'text-cream'}
+    >
+      {word}
+    </motion.span>
   );
 }

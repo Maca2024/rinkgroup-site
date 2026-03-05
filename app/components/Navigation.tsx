@@ -13,8 +13,15 @@ export function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [visible, setVisible] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const { t } = useLanguage();
+
+  // Show nav after loading screen exits (~4s)
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(true), 3800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const links = [
     { label: t.nav.vision, href: '#vision' },
@@ -88,15 +95,17 @@ export function Navigation() {
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1.2, delay: 2, ease: [0.25, 0.1, 0.25, 1] }}
+      <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
           scrolled
             ? 'glass-navy py-3 shadow-[0_4px_30px_rgba(0,0,0,0.3)]'
             : 'py-6 bg-transparent'
         }`}
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? 'translateY(0)' : 'translateY(-20px)',
+          transition: 'opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1), transform 1s cubic-bezier(0.25, 0.1, 0.25, 1)',
+        }}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* Logo — glows when scrolled */}
@@ -129,9 +138,6 @@ export function Navigation() {
                   onClick={(e) => handleAnchorClick(e, link.href)}
                   onMouseEnter={() => setHoveredLink(link.href)}
                   onMouseLeave={() => setHoveredLink(null)}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 2.2 + i * 0.1 }}
                   className="font-[family-name:var(--font-sans)] text-sm tracking-[0.15em] uppercase transition-colors duration-500 relative group overflow-hidden"
                   style={{
                     color: active
@@ -206,7 +212,7 @@ export function Navigation() {
             />
           </button>
         </div>
-      </motion.nav>
+      </nav>
 
       {/* Mobile menu */}
       <AnimatePresence>

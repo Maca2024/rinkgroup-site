@@ -8,6 +8,9 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 // Section IDs that map to # hrefs for IntersectionObserver
 const SECTION_IDS = ['vision', 'ventures', 'heritage', 'philanthropy', 'contact'];
 
+// Safety-net timeout (ms): if 'loadingscreen-exit' never fires, show nav anyway.
+const NAV_FALLBACK_DELAY = 8000;
+
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -17,10 +20,20 @@ export function Navigation() {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const { t } = useLanguage();
 
-  // Show nav after loading screen exits (~4s)
+  // Show nav when the LoadingScreen dispatches 'loadingscreen-exit'.
+  // A fallback timer forces visibility after NAV_FALLBACK_DELAY ms to handle
+  // edge cases where the event is never dispatched (e.g. JS error upstream).
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), 3800);
-    return () => clearTimeout(timer);
+    const showNav = () => setVisible(true);
+
+    window.addEventListener('loadingscreen-exit', showNav, { once: true });
+
+    const fallback = setTimeout(showNav, NAV_FALLBACK_DELAY);
+
+    return () => {
+      window.removeEventListener('loadingscreen-exit', showNav);
+      clearTimeout(fallback);
+    };
   }, []);
 
   const links = [

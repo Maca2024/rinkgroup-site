@@ -98,7 +98,7 @@ export const translations: Record<Locale, Translations> = {
         'From the ancient taiga forests of Finland to the trading floors of Amsterdam, our portfolio embodies a single conviction: that the greatest returns are born of patience, integrity, and the rare courage to think in centuries rather than cycles. We implement. We do not merely theorize.',
     },
     marquee1: 'LUMEN FELICIS',
-    marquee2: 'NATURE · ADVENTURE · CREATIVITY · TAIGASCHOOL · TECHNOLOGY & AI',
+    marquee2: 'FAMILY · NATURE · ADVENTURE · CREATIVITY · TAIGASCHOOL · AETHERLINK',
     pillars: {
       label: 'Portfolio',
       title: 'Our',
@@ -106,6 +106,14 @@ export const translations: Record<Locale, Translations> = {
       items: [
         {
           number: 'I',
+          title: 'Family',
+          subtitle: 'The Foundation of Everything',
+          body: 'Family is the origin and the destination. Every structure we build, every venture we pursue, exists to serve the people we love. Generational thinking begins at the dinner table — in loyalty, in presence, and in the courage to protect what matters most across every border and every season.',
+          stat: '∞',
+          statLabel: 'unconditional',
+        },
+        {
+          number: 'II',
           title: 'Nature',
           subtitle: 'TaigaSchool Wilderness',
           body: 'Regenerative eco-hospitality set within the Kuusamo wilderness. Boutique cabins, Northern Lights ceremonies, and profound forest immersion. Where primeval taiga meets contemporary sanctuary.',
@@ -113,7 +121,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'pristine forest',
         },
         {
-          number: 'II',
+          number: 'III',
           title: 'Adventure',
           subtitle: 'Global Exploration',
           body: 'Venturing across borders, cultures, and continents to discover what lies beyond the familiar. From the fjords of Scandinavia to distant shores — we believe the most transformative growth is born from relentless curiosity, creative risk-taking, and the courage to explore uncharted territory.',
@@ -121,7 +129,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'countries explored',
         },
         {
-          number: 'III',
+          number: 'IV',
           title: 'Creativity',
           subtitle: 'Design & Expression',
           body: 'The creative impulse runs through everything we build. From visual identity and brand architecture to spatial design and digital artistry — we believe that beauty, craft, and originality are not luxuries but foundations. Every venture carries a signature aesthetic born of intention.',
@@ -129,7 +137,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'infinite expression',
         },
         {
-          number: 'IV',
+          number: 'V',
           title: 'TaigaSchool',
           subtitle: 'The Canvas · The Focus',
           body: 'A 2.5-hectare creative campus nestled within the 180-hectare wilderness estate. TaigaSchool is where nature, education, and entrepreneurship converge — a living laboratory for regenerative hospitality, creative retreats, and transformative learning experiences.',
@@ -137,9 +145,9 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'creative campus',
         },
         {
-          number: 'V',
-          title: 'Technology & AI',
-          subtitle: 'AetherLink · Pattern Thinking',
+          number: 'VI',
+          title: 'AetherLink',
+          subtitle: 'AI · Systems Thinking',
           body: 'AI consulting and intelligent automation at the highest level. We architect the systems that transform enterprises into adaptive, self-optimizing organisms. From agent ecosystems to strategic digital transformation — guided by a deep mastery of autonomous systems and systems thinking.',
           stat: 'AI-First',
           statLabel: 'systems thinking',
@@ -208,7 +216,7 @@ export const translations: Record<Locale, Translations> = {
         'Van de oeroude taigawouden van Finland tot de handelsvloeren van Amsterdam weerspiegelt ons portfolio één overtuiging: dat het grootste rendement voortkomt uit geduld, integriteit en de zeldzame moed om in eeuwen te denken in plaats van kwartalen. Wij implementeren. Wij theoretiseren niet.',
     },
     marquee1: 'LUMEN FELICIS',
-    marquee2: 'NATUUR · AVONTUUR · CREATIVITEIT · TAIGASCHOOL · TECHNOLOGIE & AI',
+    marquee2: 'FAMILIE · NATUUR · AVONTUUR · CREATIVITEIT · TAIGASCHOOL · AETHERLINK',
     pillars: {
       label: 'Portfolio',
       title: 'Onze',
@@ -216,6 +224,14 @@ export const translations: Record<Locale, Translations> = {
       items: [
         {
           number: 'I',
+          title: 'Familie',
+          subtitle: 'De Basis van Alles',
+          body: 'Familie is de oorsprong en de bestemming. Elke structuur die wij bouwen, elke onderneming die wij nastreven, bestaat om de mensen te dienen van wie wij houden. Generatiedenken begint aan de eettafel — in loyaliteit, in aanwezigheid, en in de moed om te beschermen wat het meest telt, over elke grens en elk seizoen heen.',
+          stat: '∞',
+          statLabel: 'onvoorwaardelijk',
+        },
+        {
+          number: 'II',
           title: 'Natuur',
           subtitle: 'TaigaSchool Wildernis',
           body: 'Regeneratieve eco-gastvrijheid in de wildernis van Kuusamo. Boutique-cabins, noorderlicht-ervaringen en diepe onderdompeling in het woud. Waar de oeroude taiga het hedendaagse toevluchtsoord ontmoet.',
@@ -223,7 +239,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'ongerept bos',
         },
         {
-          number: 'II',
+          number: 'III',
           title: 'Avontuur',
           subtitle: 'Wereldverkenning',
           body: 'Grenzen, culturen en continenten verkennen om te ontdekken wat voorbij het bekende ligt. Van de fjorden van Scandinavië tot verre kusten — wij geloven dat de meest transformerende groei voortkomt uit onophoudelijke nieuwsgierigheid, creatief lef en de moed om onontgonnen terrein te betreden.',
@@ -231,7 +247,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'landen verkend',
         },
         {
-          number: 'III',
+          number: 'IV',
           title: 'Creativiteit',
           subtitle: 'Ontwerp & Expressie',
           body: 'De creatieve impuls doorloopt alles wat wij bouwen. Van visuele identiteit en merkarchitectuur tot ruimtelijk ontwerp en digitale artistry — wij geloven dat schoonheid, vakmanschap en originaliteit geen luxe zijn maar fundamenten. Elke onderneming draagt een kenmerkende esthetiek geboren uit intentie.',
@@ -239,7 +255,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'oneindige expressie',
         },
         {
-          number: 'IV',
+          number: 'V',
           title: 'TaigaSchool',
           subtitle: 'Het Canvas · De Focus',
           body: 'Een creatieve campus van 2,5 hectare genesteld in het 180 hectare grote wildernisdomein. TaigaSchool is waar natuur, educatie en ondernemerschap samenkomen — een levend laboratorium voor regeneratieve gastvrijheid, creatieve retraites en transformerende leerervaringen.',
@@ -247,9 +263,9 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'creatieve campus',
         },
         {
-          number: 'V',
-          title: 'Technologie & AI',
-          subtitle: 'AetherLink · Patroondenken',
+          number: 'VI',
+          title: 'AetherLink',
+          subtitle: 'AI · Systeemdenken',
           body: 'AI-consulting en intelligente automatisering op het hoogste niveau. Wij ontwerpen systemen die ondernemingen transformeren tot adaptieve, zelfoptimaliserende organismen. Van agent-ecosystemen tot strategische digitale transformatie — gedragen door een diepgaande beheersing van autonome systemen en systeemdenken.',
           stat: 'AI-First',
           statLabel: 'systeemdenken',
@@ -318,7 +334,7 @@ export const translations: Record<Locale, Translations> = {
         'Suomen ikuisten taigametsien reunamilta Amsterdamin kauppahalleihin — portfoliomme kiteyttää yhden vakaumuksen: suurimmat tuotot syntyvät kärsivällisyydestä, rehellisyydestä ja harvinaisesta rohkeudesta ajatella vuosisatojen mittakaavassa. Me toteutamme. Emme pelkästään teorisoi.',
     },
     marquee1: 'LUMEN FELICIS',
-    marquee2: 'LUONTO · SEIKKAILU · LUOVUUS · TAIGASCHOOL · TEKNOLOGIA & AI',
+    marquee2: 'PERHE · LUONTO · SEIKKAILU · LUOVUUS · TAIGASCHOOL · AETHERLINK',
     pillars: {
       label: 'Portfolio',
       title: 'Meidän',
@@ -326,6 +342,14 @@ export const translations: Record<Locale, Translations> = {
       items: [
         {
           number: 'I',
+          title: 'Perhe',
+          subtitle: 'Kaiken Perusta',
+          body: 'Perhe on alku ja päämäärä. Jokainen rakenne jonka pystytämme, jokainen hanke jota tavoittelemme, on olemassa palvellakseen niitä ihmisiä joita rakastamme. Sukupolvien ajattelu alkaa ruokapöydästä — uskollisuudessa, läsnäolossa ja rohkeudessa suojella sitä mikä merkitsee eniten, yli rajojen ja vuodenaikojen.',
+          stat: '∞',
+          statLabel: 'ehdoton',
+        },
+        {
+          number: 'II',
           title: 'Luonto',
           subtitle: 'TaigaSchool Erämaa',
           body: 'Uudistava ekomajoitus Kuusamon erämaan sydämessä. Boutique-mökit, revontulikokemukset ja syvä metsäelämys. Siellä missä ikivanha taiga kohtaa nykyaikaisen turvapaikan.',
@@ -333,7 +357,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'koskematonta metsää',
         },
         {
-          number: 'II',
+          number: 'III',
           title: 'Seikkailu',
           subtitle: 'Maailman tutkiminen',
           body: 'Rajojen, kulttuurien ja mantereiden tutkimista löytääksemme sen, mikä odottaa tutun tuolla puolen. Skandinavian vuonoilta kaukaisille rannoille — uskomme, että muuttavin kasvu syntyy lakkaamattomasta uteliaisuudesta, luovasta riskinotosta ja rohkeudesta tutkia kartoittamattomia alueita.',
@@ -341,7 +365,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'tutkittua maata',
         },
         {
-          number: 'III',
+          number: 'IV',
           title: 'Luovuus',
           subtitle: 'Muotoilu & Ilmaisu',
           body: 'Luova impulssi kulkee läpi kaiken mitä rakennamme. Visuaalisesta identiteetistä ja brändi-arkkitehtuurista tilasuunnitteluun ja digitaaliseen taiteeseen — uskomme, että kauneus, käsityötaito ja omaperäisyys eivät ole ylellisyyttä vaan perustuksia. Jokaisella hankkeella on intentioista syntynyt erottuva estetiikka.',
@@ -349,7 +373,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'rajaton ilmaisu',
         },
         {
-          number: 'IV',
+          number: 'V',
           title: 'TaigaSchool',
           subtitle: 'Kanvaasi · Fokus',
           body: '2,5 hehtaarin luova kampus 180 hehtaarin erämaatilan sydämessä. TaigaSchool on paikka, jossa luonto, koulutus ja yrittäjyys kohtaavat — elävä laboratorio uudistavalle vieraanvaraisuudelle, luoville retriiteille ja muuttaville oppimiskokemuksille.',
@@ -357,9 +381,9 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'luova kampus',
         },
         {
-          number: 'V',
-          title: 'Teknologia & AI',
-          subtitle: 'AetherLink · Systeemiajattelu',
+          number: 'VI',
+          title: 'AetherLink',
+          subtitle: 'AI · Systeemiajattelu',
           body: 'Tekoälykonsultointi ja älykäs automaatio huipputasolla. Arkkitehtuurimme muuttaa yritykset mukautuviksi, itseään optimoiviksi organismeiksi. Agenttiekosysteemeistä strategiseen digitaaliseen transformaatioon — syvä hallinta autonomisista järjestelmistä ja systeemiajattelusta.',
           stat: 'AI-First',
           statLabel: 'systeemiajattelu',
@@ -428,7 +452,7 @@ export const translations: Record<Locale, Translations> = {
         'من غابات التايغا الأزلية في فنلندا إلى قاعات التداول في أمستردام، تجسّد محفظتنا قناعة راسخة واحدة: أن أعظم العوائد تولد من رحم الصبر والنزاهة والشجاعة النادرة للتفكير بمقياس القرون لا الدورات. نحن ننفّذ. لا نكتفي بالتنظير.',
     },
     marquee1: 'لومين فيليسيس',
-    marquee2: 'الطبيعة · المغامرة · الإبداع · TAIGASCHOOL · التكنولوجيا والذكاء الاصطناعي',
+    marquee2: 'العائلة · الطبيعة · المغامرة · الإبداع · TAIGASCHOOL · AETHERLINK',
     pillars: {
       label: 'المحفظة',
       title: '',
@@ -436,6 +460,14 @@ export const translations: Record<Locale, Translations> = {
       items: [
         {
           number: 'I',
+          title: 'العائلة',
+          subtitle: 'أساس كل شيء',
+          body: 'العائلة هي البداية والغاية. كل بنية نشيّدها، وكل مشروع نسعى إليه، موجود لخدمة من نحب. التفكير عبر الأجيال يبدأ على مائدة العشاء — في الولاء، في الحضور، وفي الشجاعة لحماية ما يهمّ أكثر من أي شيء، عبر كل حدود وكل فصل.',
+          stat: '∞',
+          statLabel: 'بلا حدود',
+        },
+        {
+          number: 'II',
           title: 'الطبيعة',
           subtitle: 'برية TaigaSchool',
           body: 'ضيافة بيئية تجديدية في قلب برية كوسامو. أكواخ فاخرة، وتجارب الشفق القطبي، وانغمار عميق في صميم الغابة. حيث تلتقي غابة التايغا الأزلية بالملاذ المعاصر.',
@@ -443,7 +475,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'غابة بكر',
         },
         {
-          number: 'II',
+          number: 'III',
           title: 'المغامرة',
           subtitle: 'استكشاف العالم',
           body: 'عبور الحدود والثقافات والقارات لاكتشاف ما يكمن وراء المألوف. من مضايق إسكندنافيا إلى الشواطئ البعيدة — نؤمن أن النمو الأكثر تحولاً يولد من الفضول الذي لا يتوقف، والجرأة الإبداعية، والشجاعة لاستكشاف أراضٍ مجهولة.',
@@ -451,7 +483,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'دولة مُستكشَفة',
         },
         {
-          number: 'III',
+          number: 'IV',
           title: 'الإبداع',
           subtitle: 'التصميم والتعبير',
           body: 'النبض الإبداعي يسري في كل ما نبنيه. من الهوية البصرية وهندسة العلامة التجارية إلى التصميم المكاني والفن الرقمي — نؤمن أن الجمال والحرفية والأصالة ليست رفاهيات بل أسس. كل مشروع يحمل بصمة جمالية مميزة وُلدت من قصد.',
@@ -459,7 +491,7 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'تعبير لا محدود',
         },
         {
-          number: 'IV',
+          number: 'V',
           title: 'TaigaSchool',
           subtitle: 'اللوحة · التركيز',
           body: 'حرم إبداعي بمساحة ٢٫٥ هكتار يقع ضمن عقار البرية الممتد على ١٨٠ هكتار. TaigaSchool هو حيث تلتقي الطبيعة والتعليم وريادة الأعمال — مختبر حيّ للضيافة التجديدية والخلوات الإبداعية وتجارب التعلّم التحويلية.',
@@ -467,9 +499,9 @@ export const translations: Record<Locale, Translations> = {
           statLabel: 'حرم إبداعي',
         },
         {
-          number: 'V',
-          title: 'التكنولوجيا والذكاء الاصطناعي',
-          subtitle: 'AetherLink · التفكير المنظومي',
+          number: 'VI',
+          title: 'AetherLink',
+          subtitle: 'AI · التفكير المنظومي',
           body: 'استشارات الذكاء الاصطناعي والأتمتة الذكية على أرفع المستويات. نصمم الأنظمة التي تحوّل المؤسسات إلى كائنات متكيفة ذاتية التطوير. من منظومات الوكلاء إلى التحول الرقمي الاستراتيجي — بموجّه من إتقان عميق للأنظمة المستقلة والتفكير المنظومي.',
           stat: 'AI-First',
           statLabel: 'التفكير المنظومي',

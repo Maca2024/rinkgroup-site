@@ -97,20 +97,52 @@ function AuroraCanvas() {
         ctx.stroke();
       }
 
-      // === TREELINE SILHOUETTE — 3 depth layers ===
+      // === HELPER: sharp Finnish spruce silhouette ===
+      // Draws a pointed spruce tree at (cx, baseY) with given height and width
+      function drawSpruce(c: CanvasRenderingContext2D, cx: number, baseY: number, treeH: number, spread: number) {
+        // Narrow pointed top, layered branches widening downward
+        c.moveTo(cx, baseY - treeH); // sharp tip
+        // 5 tiers of branches — each wider than the last
+        const tiers = 5;
+        for (let i = 1; i <= tiers; i++) {
+          const frac = i / tiers;
+          const tierY = baseY - treeH + treeH * frac * 0.85;
+          const halfW = spread * frac * 0.55;
+          // Zigzag inward then outward for each tier
+          c.lineTo(cx - halfW, tierY);
+          if (i < tiers) c.lineTo(cx - halfW * 0.35, tierY + 2);
+        }
+        // Trunk base
+        c.lineTo(cx - spread * 0.06, baseY);
+        c.lineTo(cx + spread * 0.06, baseY);
+        // Right side — mirror
+        for (let i = tiers; i >= 1; i--) {
+          const frac = i / tiers;
+          const tierY = baseY - treeH + treeH * frac * 0.85;
+          const halfW = spread * frac * 0.55;
+          if (i < tiers) c.lineTo(cx + halfW * 0.35, tierY + 2);
+          c.lineTo(cx + halfW, tierY);
+        }
+        c.lineTo(cx, baseY - treeH); // back to tip
+      }
+
+      // === TREELINE SILHOUETTE — 3 depth layers with sharp spruces ===
       const treeLine = h * 0.7;
 
       // --- Back layer (distant trees, lightest, aurora bleed-through) ---
       ctx.beginPath();
       ctx.moveTo(0, h);
-      for (let x = 0; x <= w; x += 1) {
-        const noise = Math.sin(x * 0.012) * 28 + Math.sin(x * 0.035) * 14;
-        const spike = Math.abs(Math.sin(x * 0.055 + 1.2)) ** 3 * 50;
-        ctx.lineTo(x, treeLine - 30 + noise - spike);
+      ctx.lineTo(0, treeLine - 10);
+      // Procedural spruces — back layer (smaller, denser)
+      for (let x = 4; x < w; x += 18 + Math.sin(x * 0.07) * 6) {
+        const treeH = 35 + Math.sin(x * 0.03 + 2.1) * 18 + Math.abs(Math.sin(x * 0.09)) * 25;
+        const spread = 10 + Math.sin(x * 0.05) * 4;
+        const baseY = treeLine - 10 + Math.sin(x * 0.015) * 12;
+        drawSpruce(ctx, x, baseY, treeH, spread);
       }
+      ctx.lineTo(w, treeLine - 10);
       ctx.lineTo(w, h);
       ctx.closePath();
-      // Dark forest green with subtle aurora tint
       const backGrad = ctx.createLinearGradient(0, treeLine - 80, 0, h);
       backGrad.addColorStop(0, `rgba(16, 38, 28, ${0.75 + Math.sin(t * 0.4) * 0.05})`);
       backGrad.addColorStop(0.3, 'rgba(12, 28, 20, 0.88)');
@@ -130,17 +162,23 @@ function AuroraCanvas() {
         ctx.fillRect(x - gapWidth * 4, gapY - gapWidth * 4, gapWidth * 8, gapWidth * 8);
       }
 
-      // --- Mid layer (main forest, 33% lighter than original #040808) ---
+      // --- Mid layer (main forest, sharp spruce spikes + snow caps) ---
+      // Store tree tip positions for snow rendering
+      const midTips: Array<{ x: number; y: number; treeH: number; spread: number }> = [];
+
       ctx.beginPath();
       ctx.moveTo(0, h);
-      for (let x = 0; x <= w; x += 1) {
-        const noise = Math.sin(x * 0.02) * 20 + Math.sin(x * 0.05) * 10 + Math.sin(x * 0.15) * 5;
-        const spike = Math.abs(Math.sin(x * 0.08)) ** 3 * 40;
-        ctx.lineTo(x, treeLine + noise - spike);
+      ctx.lineTo(0, treeLine + 5);
+      for (let x = 3; x < w; x += 14 + Math.sin(x * 0.04 + 0.7) * 5) {
+        const treeH = 30 + Math.sin(x * 0.025) * 15 + Math.abs(Math.sin(x * 0.065)) * 35;
+        const spread = 9 + Math.sin(x * 0.04) * 3;
+        const baseY = treeLine + 5 + Math.sin(x * 0.018) * 10;
+        drawSpruce(ctx, x, baseY, treeH, spread);
+        midTips.push({ x, y: baseY - treeH, treeH, spread });
       }
+      ctx.lineTo(w, treeLine + 5);
       ctx.lineTo(w, h);
       ctx.closePath();
-      // #040808 → 33% lighter ≈ #0E2218 dark forest green
       const midGrad = ctx.createLinearGradient(0, treeLine - 40, 0, h);
       midGrad.addColorStop(0, '#0E2218');
       midGrad.addColorStop(0.5, '#0A1A12');
@@ -148,39 +186,153 @@ function AuroraCanvas() {
       ctx.fillStyle = midGrad;
       ctx.fill();
 
-      // Subtle edge highlights on mid-layer tree tips (moonlight / aurora rim)
+      // Aurora rim-light on mid-layer tree edges
       ctx.beginPath();
-      for (let x = 0; x <= w; x += 1) {
-        const noise = Math.sin(x * 0.02) * 20 + Math.sin(x * 0.05) * 10 + Math.sin(x * 0.15) * 5;
-        const spike = Math.abs(Math.sin(x * 0.08)) ** 3 * 40;
-        const y = treeLine + noise - spike;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+      for (let x = 3; x < w; x += 14 + Math.sin(x * 0.04 + 0.7) * 5) {
+        const treeH = 30 + Math.sin(x * 0.025) * 15 + Math.abs(Math.sin(x * 0.065)) * 35;
+        const baseY = treeLine + 5 + Math.sin(x * 0.018) * 10;
+        const tipY = baseY - treeH;
+        ctx.moveTo(x, tipY);
+        ctx.lineTo(x + 2, tipY + treeH * 0.15);
       }
-      ctx.strokeStyle = `rgba(80, 180, 120, ${0.04 + Math.sin(t * 0.6) * 0.02})`;
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = `rgba(80, 180, 120, ${0.06 + Math.sin(t * 0.6) * 0.03})`;
+      ctx.lineWidth = 0.8;
       ctx.stroke();
 
-      // --- Front layer (closest trees, darkest, adds depth) ---
+      // === SNOW CAPS on mid-layer tree tips ===
+      for (const tip of midTips) {
+        const snowH = 3 + Math.sin(tip.x * 0.07) * 2; // varying snow depth
+        const snowW = tip.spread * 0.18 + Math.sin(tip.x * 0.1) * 1.5;
+
+        // Snow triangle on the very tip
+        ctx.beginPath();
+        ctx.moveTo(tip.x, tip.y);
+        ctx.lineTo(tip.x - snowW, tip.y + snowH);
+        ctx.quadraticCurveTo(tip.x, tip.y + snowH + 1.5, tip.x + snowW, tip.y + snowH);
+        ctx.closePath();
+
+        const snowGrad = ctx.createLinearGradient(tip.x, tip.y, tip.x, tip.y + snowH + 2);
+        snowGrad.addColorStop(0, 'rgba(220, 230, 240, 0.55)');
+        snowGrad.addColorStop(0.6, 'rgba(200, 215, 230, 0.35)');
+        snowGrad.addColorStop(1, 'rgba(180, 200, 220, 0.10)');
+        ctx.fillStyle = snowGrad;
+        ctx.fill();
+
+        // Tiny snow on 2nd tier (occasional)
+        if (Math.sin(tip.x * 0.13) > 0.3) {
+          const tier2Y = tip.y + tip.treeH * 0.2;
+          const tier2W = tip.spread * 0.25;
+          ctx.beginPath();
+          ctx.moveTo(tip.x - tier2W, tier2Y);
+          ctx.quadraticCurveTo(tip.x, tier2Y - 1.5, tip.x + tier2W, tier2Y);
+          ctx.quadraticCurveTo(tip.x, tier2Y + 1, tip.x - tier2W, tier2Y);
+          ctx.fillStyle = 'rgba(210, 225, 235, 0.18)';
+          ctx.fill();
+        }
+      }
+
+      // --- Front layer (closest trees, darkest, sharp spikes) ---
+      const frontTips: Array<{ x: number; y: number; treeH: number; spread: number }> = [];
+
       ctx.beginPath();
       ctx.moveTo(0, h);
-      for (let x = 0; x <= w; x += 1) {
-        const noise = Math.sin(x * 0.025 + 0.5) * 15 + Math.sin(x * 0.07) * 8;
-        const spike = Math.abs(Math.sin(x * 0.1 + 0.3)) ** 3 * 35;
-        ctx.lineTo(x, treeLine + 30 + noise - spike);
+      ctx.lineTo(0, treeLine + 25);
+      for (let x = 7; x < w; x += 20 + Math.sin(x * 0.03 + 1.5) * 8) {
+        const treeH = 25 + Math.sin(x * 0.02 + 0.5) * 12 + Math.abs(Math.sin(x * 0.075)) * 30;
+        const spread = 11 + Math.sin(x * 0.035) * 4;
+        const baseY = treeLine + 30 + Math.sin(x * 0.02) * 8;
+        drawSpruce(ctx, x, baseY, treeH, spread);
+        frontTips.push({ x, y: baseY - treeH, treeH, spread });
       }
+      ctx.lineTo(w, treeLine + 25);
       ctx.lineTo(w, h);
       ctx.closePath();
       ctx.fillStyle = '#081410';
       ctx.fill();
 
-      // Ground fog — ethereal mist between forest and viewer
+      // Snow caps on front layer too
+      for (const tip of frontTips) {
+        const snowH = 2.5 + Math.sin(tip.x * 0.05) * 1.5;
+        const snowW = tip.spread * 0.2;
+        ctx.beginPath();
+        ctx.moveTo(tip.x, tip.y);
+        ctx.lineTo(tip.x - snowW, tip.y + snowH);
+        ctx.quadraticCurveTo(tip.x, tip.y + snowH + 1, tip.x + snowW, tip.y + snowH);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(200, 215, 230, 0.30)';
+        ctx.fill();
+      }
+
+      // Ground fog
       const fogGrad = ctx.createLinearGradient(0, h * 0.85, 0, h);
       fogGrad.addColorStop(0, 'transparent');
       fogGrad.addColorStop(0.5, `rgba(12, 30, 22, ${0.06 + Math.sin(t * 0.2) * 0.03})`);
       fogGrad.addColorStop(1, `rgba(6, 10, 16, ${0.15 + Math.sin(t * 0.15) * 0.05})`);
       ctx.fillStyle = fogGrad;
       ctx.fillRect(0, h * 0.75, w, h * 0.25);
+
+      // === FLYING RAVEN ===
+      // Soaring raven that glides across the sky with slow wingbeats
+      const ravenCycle = 45; // seconds for full crossing
+      const ravenProgress = ((t * 0.8) % ravenCycle) / ravenCycle; // 0→1
+      const ravenX = -40 + (w + 80) * ravenProgress;
+      const ravenBaseY = treeLine * 0.35 + Math.sin(ravenProgress * Math.PI * 3) * 25; // gentle wave path
+      const ravenY = ravenBaseY + Math.sin(t * 1.2) * 4; // subtle body bob
+
+      // Wing flap phase — slow glide with occasional flaps
+      const wingT = t * 1.8;
+      const wingAngle = Math.sin(wingT) * 0.35 + Math.sin(wingT * 2.3) * 0.12; // asymmetric flap
+      const wingSpan = 18;
+      const bodyLen = 10;
+
+      ctx.save();
+      ctx.translate(ravenX, ravenY);
+
+      // Body
+      ctx.beginPath();
+      ctx.ellipse(0, 0, bodyLen, 2.5, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(8, 8, 12, 0.85)';
+      ctx.fill();
+
+      // Head
+      ctx.beginPath();
+      ctx.arc(bodyLen * 0.7, -1, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Beak
+      ctx.beginPath();
+      ctx.moveTo(bodyLen * 0.7 + 3, -1.5);
+      ctx.lineTo(bodyLen * 0.7 + 7, -0.5);
+      ctx.lineTo(bodyLen * 0.7 + 3, 0);
+      ctx.fillStyle = 'rgba(20, 20, 25, 0.9)';
+      ctx.fill();
+
+      // Left wing
+      ctx.beginPath();
+      ctx.moveTo(-2, 0);
+      ctx.quadraticCurveTo(-wingSpan * 0.5, -wingSpan * wingAngle - 6, -wingSpan, -wingSpan * wingAngle * 0.7);
+      ctx.quadraticCurveTo(-wingSpan * 0.6, -wingSpan * wingAngle * 0.2 + 1, -2, 1);
+      ctx.fillStyle = 'rgba(10, 10, 15, 0.8)';
+      ctx.fill();
+
+      // Right wing
+      ctx.beginPath();
+      ctx.moveTo(-2, 0);
+      ctx.quadraticCurveTo(-wingSpan * 0.5, wingSpan * wingAngle * 0.5 + 5, -wingSpan * 0.8, wingSpan * wingAngle * 0.4 + 3);
+      ctx.quadraticCurveTo(-wingSpan * 0.4, wingSpan * wingAngle * 0.15 + 1, -2, 1);
+      ctx.fill();
+
+      // Tail feathers — forked
+      ctx.beginPath();
+      ctx.moveTo(-bodyLen + 1, -1);
+      ctx.lineTo(-bodyLen - 5, -2.5);
+      ctx.lineTo(-bodyLen - 3, 0);
+      ctx.lineTo(-bodyLen - 5, 2);
+      ctx.lineTo(-bodyLen + 1, 1);
+      ctx.fillStyle = 'rgba(8, 8, 12, 0.75)';
+      ctx.fill();
+
+      ctx.restore();
 
       // === SNOWFLAKES ===
       for (const flake of snowflakes) {

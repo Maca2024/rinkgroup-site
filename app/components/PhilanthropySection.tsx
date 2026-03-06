@@ -10,12 +10,13 @@ import {
 } from 'framer-motion';
 import { useLanguage } from '../i18n/LanguageContext';
 
-// ─── SVG: Elegant sitting dog silhouette in rose-gold ──────────────────────
+// ─── SVG: Dual-dog illustration — Amstaff (left) + Akita (right) ───────────
+// Lifelike 3D-depth, luxury brand register. ViewBox 0 0 240 140.
 
 function DogSilhouette({ className }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 120 120"
+      viewBox="0 0 240 140"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
@@ -23,197 +24,550 @@ function DogSilhouette({ className }: { className?: string }) {
       role="img"
     >
       <defs>
-        <radialGradient id="dog-glow" cx="50%" cy="60%" r="45%">
-          <stop offset="0%" stopColor="#C5956B" stopOpacity="0.18" />
-          <stop offset="100%" stopColor="#C5956B" stopOpacity="0" />
-        </radialGradient>
-        <linearGradient id="dog-body" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#E8CDB5" stopOpacity="0.9" />
-          <stop offset="45%" stopColor="#C5956B" stopOpacity="0.85" />
-          <stop offset="100%" stopColor="#A0754E" stopOpacity="0.7" />
-        </linearGradient>
-        <linearGradient id="dog-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#C5956B" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#7A5535" stopOpacity="0.25" />
-        </linearGradient>
-        <filter id="dog-soft-glow" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="3.5" result="blur" />
+        {/* ── Shared filters ── */}
+        <filter id="duo-soft-shadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2.5" result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="over" />
         </filter>
-        <filter id="glow-halo" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur stdDeviation="8" result="glow" />
+        <filter id="duo-glow-halo" x="-35%" y="-35%" width="170%" height="170%">
+          <feGaussianBlur stdDeviation="5" result="glow" />
           <feMerge>
             <feMergeNode in="glow" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
+
+        {/* ── Shared ground glow ── */}
+        <radialGradient id="duo-ground-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#C5956B" stopOpacity="0.12" />
+          <stop offset="100%" stopColor="#C5956B" stopOpacity="0" />
+        </radialGradient>
+
+        {/* ── AMSTAFF gradients (sand/fawn, light from upper-left) ── */}
+        <linearGradient id="duo-am-body" x1="20%" y1="0%" x2="80%" y2="100%">
+          <stop offset="0%" stopColor="#E8CDB5" />
+          <stop offset="40%" stopColor="#D4A574" />
+          <stop offset="75%" stopColor="#C5956B" />
+          <stop offset="100%" stopColor="#A0754E" />
+        </linearGradient>
+        <linearGradient id="duo-am-body-side" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#D4A574" />
+          <stop offset="60%" stopColor="#C5956B" />
+          <stop offset="100%" stopColor="#7A5535" />
+        </linearGradient>
+        <linearGradient id="duo-am-chest" x1="30%" y1="0%" x2="70%" y2="100%">
+          <stop offset="0%" stopColor="#E8CDB5" />
+          <stop offset="50%" stopColor="#D4A574" />
+          <stop offset="100%" stopColor="#A0754E" />
+        </linearGradient>
+        <radialGradient id="duo-am-chest-vol" cx="45%" cy="35%" r="55%">
+          <stop offset="0%" stopColor="#E8CDB5" stopOpacity="0.9" />
+          <stop offset="60%" stopColor="#C5956B" stopOpacity="0.7" />
+          <stop offset="100%" stopColor="#7A5535" stopOpacity="0.5" />
+        </radialGradient>
+        <linearGradient id="duo-am-head" x1="20%" y1="0%" x2="80%" y2="100%">
+          <stop offset="0%" stopColor="#E8CDB5" />
+          <stop offset="50%" stopColor="#D4A574" />
+          <stop offset="100%" stopColor="#A0754E" />
+        </linearGradient>
+        <linearGradient id="duo-am-muzzle" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#D4A574" />
+          <stop offset="100%" stopColor="#A0754E" />
+        </linearGradient>
+        <linearGradient id="duo-am-ear" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#C5956B" />
+          <stop offset="100%" stopColor="#7A5535" />
+        </linearGradient>
+        <linearGradient id="duo-am-leg" x1="0%" y1="0%" x2="60%" y2="100%">
+          <stop offset="0%" stopColor="#D4A574" />
+          <stop offset="100%" stopColor="#A0754E" />
+        </linearGradient>
+        <linearGradient id="duo-am-haunch" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#C5956B" />
+          <stop offset="100%" stopColor="#7A5535" />
+        </linearGradient>
+
+        {/* ── AKITA gradients (white/cream, light from upper-left) ── */}
+        <linearGradient id="duo-ak-body" x1="20%" y1="0%" x2="80%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="35%" stopColor="#F5F0E8" />
+          <stop offset="70%" stopColor="#E8DFD0" />
+          <stop offset="100%" stopColor="#D4C4B0" />
+        </linearGradient>
+        <linearGradient id="duo-ak-body-shadow" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#E8DFD0" />
+          <stop offset="60%" stopColor="#D4C4B0" />
+          <stop offset="100%" stopColor="#B8A890" />
+        </linearGradient>
+        <radialGradient id="duo-ak-chest-vol" cx="40%" cy="30%" r="60%">
+          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
+          <stop offset="55%" stopColor="#F5F0E8" stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#D4C4B0" stopOpacity="0.6" />
+        </radialGradient>
+        <linearGradient id="duo-ak-head" x1="15%" y1="0%" x2="85%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="45%" stopColor="#F5F0E8" />
+          <stop offset="100%" stopColor="#D4C4B0" />
+        </linearGradient>
+        <linearGradient id="duo-ak-ruff" x1="20%" y1="0%" x2="80%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="50%" stopColor="#F5F0E8" />
+          <stop offset="100%" stopColor="#D4C4B0" />
+        </linearGradient>
+        <linearGradient id="duo-ak-ear" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#F5F0E8" />
+          <stop offset="100%" stopColor="#B8A890" />
+        </linearGradient>
+        <linearGradient id="duo-ak-tail" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="50%" stopColor="#F5F0E8" />
+          <stop offset="100%" stopColor="#D4C4B0" />
+        </linearGradient>
+        <linearGradient id="duo-ak-leg" x1="0%" y1="0%" x2="60%" y2="100%">
+          <stop offset="0%" stopColor="#F5F0E8" />
+          <stop offset="100%" stopColor="#D4C4B0" />
+        </linearGradient>
+        <linearGradient id="duo-ak-haunch" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#E8DFD0" />
+          <stop offset="100%" stopColor="#B8A890" />
+        </linearGradient>
       </defs>
 
-      {/* Ambient glow halo behind figure */}
-      <ellipse
-        cx="60"
-        cy="78"
-        rx="32"
-        ry="18"
-        fill="url(#dog-glow)"
-        opacity="0.7"
-      />
+      {/* ════════════════════════════════════════════════════════════
+          GROUND PLANE
+          ════════════════════════════════════════════════════════════ */}
+      {/* Shared ground glow */}
+      <ellipse cx="120" cy="133" rx="90" ry="7" fill="url(#duo-ground-glow)" />
+      {/* Amstaff ground shadow */}
+      <ellipse cx="78" cy="134" rx="30" ry="3.5" fill="#A0754E" opacity="0.10" />
+      {/* Akita ground shadow */}
+      <ellipse cx="162" cy="134" rx="36" ry="4" fill="#B8A890" opacity="0.09" />
 
-      {/* Ground shadow */}
-      <ellipse
-        cx="60"
-        cy="108"
-        rx="22"
-        ry="4"
-        fill="#C5956B"
-        opacity="0.12"
-      />
+      {/* ════════════════════════════════════════════════════════════
+          AMSTAFF — sand/fawn — sits LEFT, faces slightly right
+          Head ~y=35, ground y=130
+          ════════════════════════════════════════════════════════════ */}
 
-      {/* ── Body (haunches / torso sitting) ── */}
-      {/* Rear haunch — left mass */}
+      {/* Rear haunches / rump mass */}
       <path
-        d="M30 108 C28 96 26 84 32 76 C37 69 46 67 52 70 C56 72 57 78 56 86 C55 94 52 102 50 108 Z"
-        fill="url(#dog-body)"
-        opacity="0.82"
-        filter="url(#dog-soft-glow)"
-      />
-      {/* Main torso block */}
-      <path
-        d="M52 70 C54 62 56 54 60 50 C64 46 70 46 74 50 C78 54 78 62 76 70 C74 78 68 84 62 86 C57 87 53 80 52 70 Z"
-        fill="url(#dog-body)"
-        opacity="0.88"
-      />
-      {/* Seated rump / right haunch */}
-      <path
-        d="M56 86 C58 92 60 100 60 108 L70 108 C70 100 69 90 68 82 C66 76 62 74 58 76 C56 78 56 82 56 86 Z"
-        fill="url(#dog-shadow)"
-        opacity="0.75"
-      />
-
-      {/* ── Front legs (upright, sitting) ── */}
-      {/* Left front leg */}
-      <path
-        d="M48 86 C46 88 44 92 44 98 C44 104 46 107 48 108 L52 108 C52 104 52 98 52 92 C52 88 51 86 48 86 Z"
-        fill="url(#dog-body)"
-        opacity="0.7"
-      />
-      {/* Right front leg */}
-      <path
-        d="M64 84 C62 86 62 92 62 98 C62 104 63 107 65 108 L69 108 C69 104 68 98 68 92 C68 88 67 85 64 84 Z"
-        fill="url(#dog-body)"
-        opacity="0.7"
-      />
-
-      {/* ── Neck ── */}
-      <path
-        d="M58 52 C56 46 57 40 60 36 C61 34 63 33 65 34 C67 36 67 40 66 46 C65 50 63 54 60 56 Z"
-        fill="url(#dog-body)"
-        opacity="0.85"
-      />
-
-      {/* ── Head ── */}
-      {/* Skull */}
-      <ellipse
-        cx="66"
-        cy="30"
-        rx="12"
-        ry="11"
-        fill="url(#dog-body)"
-        opacity="0.9"
-        filter="url(#dog-soft-glow)"
-      />
-      {/* Muzzle */}
-      <path
-        d="M54 32 C52 33 51 35 52 37 C53 39 56 40 60 40 C63 40 66 39 67 37 C68 35 67 33 65 32 C62 31 57 31 54 32 Z"
-        fill="url(#dog-shadow)"
+        d="M48 130 C44 118 40 104 44 93 C47 84 56 80 63 83 C68 86 69 94 67 104 C65 113 62 122 60 130 Z"
+        fill="url(#duo-am-haunch)"
         opacity="0.78"
+        filter="url(#duo-soft-shadow)"
       />
-      {/* Nose */}
-      <ellipse
-        cx="58"
-        cy="36"
-        rx="2.5"
-        ry="1.8"
-        fill="#7A5535"
-        opacity="0.55"
+      {/* Left haunch outer curve */}
+      <path
+        d="M48 130 C45 120 43 108 46 98 C48 91 54 87 60 89 C63 91 64 97 63 106 C61 115 58 124 56 130 Z"
+        fill="url(#duo-am-body-side)"
+        opacity="0.65"
       />
 
-      {/* ── Ear (folded, shepherd-style pointing up slightly) ── */}
+      {/* Main torso — broad muscular chest */}
       <path
-        d="M72 22 C74 14 76 10 73 8 C70 6 66 10 64 16 C62 20 63 24 66 26 C69 27 71 25 72 22 Z"
-        fill="url(#dog-body)"
-        opacity="0.8"
+        d="M63 83 C65 73 66 62 68 55 C70 48 74 44 79 44 C85 44 89 49 90 57 C91 65 89 74 86 82 C83 89 77 93 71 93 C65 93 62 89 63 83 Z"
+        fill="url(#duo-am-chest-vol)"
+        opacity="0.90"
       />
-      {/* Ear inner shadow */}
+      {/* Chest highlight band */}
       <path
-        d="M71 21 C72 16 72 12 70 10 C68 11 66 15 66 19 C66 22 68 24 70 24 C71 23 71 22 71 21 Z"
-        fill="#A0754E"
+        d="M68 60 C69 53 72 48 77 47 C82 46 87 50 88 57 C87 52 83 48 79 48 C74 48 70 53 68 60 Z"
+        fill="#E8CDB5"
         opacity="0.35"
       />
 
-      {/* ── Tail (curled upward behind, German shepherd style) ── */}
+      {/* Shoulder muscle definition — left */}
       <path
-        d="M30 76 C24 68 20 58 22 50 C24 44 30 40 36 42 C40 44 40 50 38 56 C36 60 34 66 36 70 C38 74 36 76 32 76"
-        fill="none"
-        stroke="url(#dog-body)"
-        strokeWidth="4.5"
-        strokeLinecap="round"
-        opacity="0.72"
-      />
-      {/* Tail highlight */}
-      <path
-        d="M31 74 C26 66 23 56 25 50 C26 46 30 43 34 44"
+        d="M63 83 C62 76 63 68 66 62 C68 57 71 54 74 54"
         fill="none"
         stroke="#E8CDB5"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        opacity="0.3"
-      />
-
-      {/* ── Eye ── */}
-      <ellipse
-        cx="63"
-        cy="28"
-        rx="2"
-        ry="2"
-        fill="#4A2E18"
-        opacity="0.6"
-      />
-      {/* Eye gleam */}
-      <ellipse
-        cx="63.6"
-        cy="27.4"
-        rx="0.7"
-        ry="0.7"
-        fill="#E8CDB5"
-        opacity="0.55"
-      />
-
-      {/* ── Fur detail lines (depth / texture) ── */}
-      <path
-        d="M56 72 C58 68 62 66 66 68"
-        fill="none"
-        stroke="#E8CDB5"
-        strokeWidth="0.8"
-        strokeLinecap="round"
-        opacity="0.22"
-      />
-      <path
-        d="M54 80 C57 76 62 75 65 77"
-        fill="none"
-        stroke="#E8CDB5"
-        strokeWidth="0.8"
+        strokeWidth="0.6"
         strokeLinecap="round"
         opacity="0.18"
       />
+      {/* Shoulder muscle — right */}
       <path
-        d="M60 54 C62 50 65 48 68 50"
+        d="M86 81 C88 74 89 66 88 59 C87 54 85 50 82 49"
+        fill="none"
+        stroke="#E8CDB5"
+        strokeWidth="0.6"
+        strokeLinecap="round"
+        opacity="0.14"
+      />
+
+      {/* Left front leg */}
+      <path
+        d="M66 93 C65 97 64 104 64 112 C64 120 65 126 66 130 L71 130 C71 124 71 116 71 108 C71 100 71 93 69 91 Z"
+        fill="url(#duo-am-leg)"
+        opacity="0.80"
+      />
+      {/* Right front leg */}
+      <path
+        d="M80 91 C79 95 78 102 78 111 C78 119 79 125 80 130 L85 130 C85 124 85 116 84 108 C83 100 83 94 82 91 Z"
+        fill="url(#duo-am-leg)"
+        opacity="0.76"
+      />
+      {/* Leg inner shadow — left */}
+      <path
+        d="M69 93 C68 98 68 106 68 114 C68 122 68 127 69 130"
+        fill="none"
+        stroke="#7A5535"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        opacity="0.12"
+      />
+
+      {/* Neck — thick, muscular */}
+      <path
+        d="M70 55 C68 48 68 41 70 36 C72 32 75 30 78 31 C81 32 82 36 81 41 C80 47 78 52 75 56 Z"
+        fill="url(#duo-am-body)"
+        opacity="0.88"
+      />
+      {/* Neck highlight */}
+      <path
+        d="M72 53 C70 47 70 41 72 37"
         fill="none"
         stroke="#E8CDB5"
         strokeWidth="0.7"
         strokeLinecap="round"
-        opacity="0.2"
+        opacity="0.20"
       />
+
+      {/* Head — wide skull, broad cheeks */}
+      <ellipse
+        cx="82"
+        cy="28"
+        rx="13"
+        ry="11.5"
+        fill="url(#duo-am-head)"
+        opacity="0.92"
+        filter="url(#duo-soft-shadow)"
+      />
+      {/* Cheek mass — right (facing right) */}
+      <ellipse
+        cx="91"
+        cy="30"
+        rx="5.5"
+        ry="5"
+        fill="url(#duo-am-head)"
+        opacity="0.70"
+      />
+      {/* Skull highlight */}
+      <ellipse
+        cx="78"
+        cy="23"
+        rx="5"
+        ry="3.5"
+        fill="#E8CDB5"
+        opacity="0.28"
+      />
+
+      {/* Muzzle — short, wide, strong jaw */}
+      <path
+        d="M72 30 C70 31 69 33 70 36 C71 38 74 40 78 40 C82 40 86 39 87 37 C88 35 87 32 85 31 C82 29 76 29 72 30 Z"
+        fill="url(#duo-am-muzzle)"
+        opacity="0.82"
+      />
+      {/* Muzzle highlight */}
+      <path
+        d="M74 31 C72 32 71 34 72 36"
+        fill="none"
+        stroke="#E8CDB5"
+        strokeWidth="0.6"
+        strokeLinecap="round"
+        opacity="0.22"
+      />
+      {/* Nose */}
+      <ellipse cx="76" cy="35" rx="3" ry="2" fill="#3A2A1A" opacity="0.60" />
+      {/* Nose highlight */}
+      <ellipse cx="74.8" cy="34.2" rx="0.8" ry="0.5" fill="#E8CDB5" opacity="0.22" />
+      {/* Jaw line */}
+      <path
+        d="M70 36 C70 38 72 40 76 41 C80 41 84 40 86 38"
+        fill="none"
+        stroke="#7A5535"
+        strokeWidth="0.5"
+        strokeLinecap="round"
+        opacity="0.18"
+      />
+
+      {/* Ear — rose / half-pricked, left ear */}
+      <path
+        d="M74 20 C73 14 74 9 71 7 C68 5 65 9 65 14 C65 18 67 22 70 23 C72 24 74 22 74 20 Z"
+        fill="url(#duo-am-ear)"
+        opacity="0.82"
+      />
+      {/* Ear inner shadow */}
+      <path
+        d="M73 19 C73 14 73 10 71 8 C69 9 67 13 67 17 C67 20 69 22 71 22 Z"
+        fill="#7A5535"
+        opacity="0.28"
+      />
+      {/* Right ear (tip visible) */}
+      <path
+        d="M90 19 C91 14 92 10 90 8 C88 7 85 10 85 15 C85 18 87 21 89 21 Z"
+        fill="url(#duo-am-ear)"
+        opacity="0.68"
+      />
+
+      {/* Eye — wide-set, right eye (dominant, facing right) */}
+      <ellipse cx="87" cy="27" rx="2.2" ry="2" fill="#3A2A1A" opacity="0.65" />
+      <ellipse cx="87.8" cy="26.2" rx="0.7" ry="0.65" fill="#FFFFFF" opacity="0.55" />
+      {/* Left eye (partially visible) */}
+      <ellipse cx="76" cy="27" rx="1.8" ry="1.6" fill="#3A2A1A" opacity="0.45" />
+      <ellipse cx="76.5" cy="26.4" rx="0.5" ry="0.5" fill="#FFFFFF" opacity="0.30" />
+
+      {/* Short tail — low-set, slightly curved */}
+      <path
+        d="M48 103 C42 99 38 94 38 88 C38 84 40 82 43 83 C45 84 46 88 47 93 C48 98 48 103 48 103"
+        fill="none"
+        stroke="url(#duo-am-body)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        opacity="0.70"
+      />
+      <path
+        d="M48 101 C43 97 40 92 40 87"
+        fill="none"
+        stroke="#E8CDB5"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        opacity="0.22"
+      />
+
+      {/* Amstaff fur texture hints — chest + shoulder */}
+      <path d="M70 68 C72 64 76 62 80 63" fill="none" stroke="#E8CDB5" strokeWidth="0.6" strokeLinecap="round" opacity="0.15" />
+      <path d="M69 76 C72 72 77 71 81 72" fill="none" stroke="#E8CDB5" strokeWidth="0.6" strokeLinecap="round" opacity="0.12" />
+      <path d="M71 84 C74 81 78 80 82 81" fill="none" stroke="#E8CDB5" strokeWidth="0.5" strokeLinecap="round" opacity="0.10" />
+      <path d="M72 58 C74 54 78 52 82 53" fill="none" stroke="#E8CDB5" strokeWidth="0.5" strokeLinecap="round" opacity="0.14" />
+
+      {/* ════════════════════════════════════════════════════════════
+          AMERICAN AKITA — white/cream — sits RIGHT, faces slightly left
+          Head ~y=22, ground y=130 (taller than Amstaff)
+          ════════════════════════════════════════════════════════════ */}
+
+      {/* Rear haunches — large, powerful */}
+      <path
+        d="M188 130 C192 118 196 103 192 90 C188 79 178 74 170 77 C164 80 162 89 163 100 C164 110 166 121 168 130 Z"
+        fill="url(#duo-ak-haunch)"
+        opacity="0.78"
+        filter="url(#duo-soft-shadow)"
+      />
+      {/* Right haunch outer */}
+      <path
+        d="M188 130 C191 119 194 105 190 93 C187 84 180 79 174 82 C169 85 168 93 169 103 C170 113 172 122 174 130 Z"
+        fill="url(#duo-ak-body-shadow)"
+        opacity="0.60"
+      />
+
+      {/* Main torso — large, fluffy body */}
+      {/* Wavy/fluffy silhouette for the right side */}
+      <path
+        d="M163 100 C161 90 160 78 161 67 C162 57 165 50 170 46 C175 42 182 41 188 44 C194 47 197 54 197 63 C197 72 194 82 190 90 C186 97 178 100 170 100 Z"
+        fill="url(#duo-ak-chest-vol)"
+        opacity="0.88"
+      />
+      {/* Fluffy body edge — left side wavy */}
+      <path
+        d="M161 68 C159 65 157 61 158 57 C159 54 162 52 164 54 C162 58 161 63 161 68 Z"
+        fill="url(#duo-ak-ruff)"
+        opacity="0.40"
+      />
+      {/* Chest highlight */}
+      <path
+        d="M168 52 C170 46 175 43 180 43 C185 43 190 47 192 53"
+        fill="none"
+        stroke="#FFFFFF"
+        strokeWidth="0.8"
+        strokeLinecap="round"
+        opacity="0.35"
+      />
+
+      {/* Neck ruff — layered fur shapes (signature Akita) */}
+      <path
+        d="M162 75 C157 71 153 65 154 59 C155 54 159 51 163 52 C161 57 160 63 162 69 Z"
+        fill="url(#duo-ak-ruff)"
+        opacity="0.55"
+      />
+      <path
+        d="M163 70 C158 66 156 60 157 55 C158 51 162 49 165 50 C163 55 162 62 163 68 Z"
+        fill="url(#duo-ak-ruff)"
+        opacity="0.50"
+      />
+      <path
+        d="M165 67 C161 63 160 57 161 53 C162 50 165 48 168 49 C166 53 165 60 165 66 Z"
+        fill="#FFFFFF"
+        opacity="0.25"
+      />
+      {/* Ruff highlight stroke */}
+      <path
+        d="M158 65 C156 60 156 55 158 51"
+        fill="none"
+        stroke="#FFFFFF"
+        strokeWidth="0.7"
+        strokeLinecap="round"
+        opacity="0.30"
+      />
+
+      {/* Left front leg */}
+      <path
+        d="M163 98 C161 103 160 111 160 119 C160 125 161 128 162 130 L168 130 C167 125 167 117 167 109 C167 101 167 95 165 94 Z"
+        fill="url(#duo-ak-leg)"
+        opacity="0.82"
+      />
+      {/* Right front leg */}
+      <path
+        d="M179 95 C178 100 177 108 177 117 C177 124 178 127 179 130 L185 130 C185 125 184 117 184 109 C184 101 184 96 182 94 Z"
+        fill="url(#duo-ak-leg)"
+        opacity="0.78"
+      />
+      {/* Leg shadow */}
+      <path
+        d="M165 96 C164 102 164 110 164 120 C164 126 164 129 165 130"
+        fill="none"
+        stroke="#B8A890"
+        strokeWidth="1.0"
+        strokeLinecap="round"
+        opacity="0.14"
+      />
+
+      {/* Neck — thick */}
+      <path
+        d="M165 52 C163 45 163 37 165 31 C167 26 171 23 175 23 C179 23 182 27 182 33 C182 39 179 46 176 51 Z"
+        fill="url(#duo-ak-body)"
+        opacity="0.86"
+      />
+
+      {/* Head — broad, bear-like */}
+      <ellipse
+        cx="167"
+        cy="18"
+        rx="15"
+        ry="13"
+        fill="url(#duo-ak-head)"
+        opacity="0.93"
+        filter="url(#duo-soft-shadow)"
+      />
+      {/* Forehead highlight */}
+      <ellipse
+        cx="162"
+        cy="12"
+        rx="6"
+        ry="4"
+        fill="#FFFFFF"
+        opacity="0.30"
+      />
+      {/* Cheek mass — left (facing left) */}
+      <ellipse
+        cx="157"
+        cy="21"
+        rx="5"
+        ry="4.5"
+        fill="url(#duo-ak-head)"
+        opacity="0.65"
+      />
+
+      {/* Muzzle — shorter, broad */}
+      <path
+        d="M154 19 C152 20 151 22 152 25 C153 28 156 30 160 30 C164 30 168 28 169 26 C170 23 168 20 166 19 C163 18 157 18 154 19 Z"
+        fill="url(#duo-ak-body-shadow)"
+        opacity="0.75"
+      />
+      {/* Nose */}
+      <ellipse cx="160" cy="24" rx="3.2" ry="2.2" fill="#3A2A1A" opacity="0.65" />
+      <ellipse cx="158.8" cy="23.2" rx="0.9" ry="0.6" fill="#FFFFFF" opacity="0.25" />
+      {/* Jaw */}
+      <path
+        d="M152 25 C153 27 156 29 160 30 C164 30 168 28 169 26"
+        fill="none"
+        stroke="#B8A890"
+        strokeWidth="0.5"
+        strokeLinecap="round"
+        opacity="0.16"
+      />
+
+      {/* Ears — small, triangular, erect */}
+      {/* Left ear */}
+      <path
+        d="M157 9 C156 4 157 0 160 0 C163 0 163 4 162 9 C161 11 159 12 158 11 Z"
+        fill="url(#duo-ak-ear)"
+        opacity="0.85"
+      />
+      {/* Left ear inner */}
+      <path
+        d="M158 9 C157 5 158 2 160 1 C162 2 162 5 161 9 Z"
+        fill="#B8A890"
+        opacity="0.30"
+      />
+      {/* Right ear */}
+      <path
+        d="M172 8 C172 3 173 0 176 0 C179 0 179 4 178 9 C177 11 174 12 173 11 Z"
+        fill="url(#duo-ak-ear)"
+        opacity="0.80"
+      />
+      {/* Right ear inner */}
+      <path
+        d="M173 8 C173 4 174 2 176 1 C178 2 178 5 177 8 Z"
+        fill="#B8A890"
+        opacity="0.25"
+      />
+
+      {/* Eyes — small, deep-set, triangular shape */}
+      {/* Left eye (dominant — facing left) */}
+      <ellipse cx="157" cy="17" rx="2.2" ry="1.8" fill="#3A2A1A" opacity="0.68" />
+      <ellipse cx="156.2" cy="16.3" rx="0.65" ry="0.6" fill="#FFFFFF" opacity="0.55" />
+      {/* Right eye */}
+      <ellipse cx="175" cy="17" rx="2" ry="1.8" fill="#3A2A1A" opacity="0.48" />
+      <ellipse cx="175.6" cy="16.4" rx="0.55" ry="0.55" fill="#FFFFFF" opacity="0.35" />
+
+      {/* Curled tail — signature Akita, rests over back */}
+      {/* Tail base arc */}
+      <path
+        d="M188 80 C194 72 200 62 200 54 C200 47 197 42 193 41 C189 40 185 44 183 50 C181 55 181 62 183 67 C185 73 186 77 186 80"
+        fill="none"
+        stroke="url(#duo-ak-tail)"
+        strokeWidth="7"
+        strokeLinecap="round"
+        opacity="0.70"
+      />
+      {/* Tail curl top */}
+      <path
+        d="M183 50 C182 45 183 41 186 40 C189 39 192 42 193 46"
+        fill="none"
+        stroke="url(#duo-ak-tail)"
+        strokeWidth="5"
+        strokeLinecap="round"
+        opacity="0.60"
+      />
+      {/* Tail highlight stripe */}
+      <path
+        d="M189 78 C195 70 200 60 199 52 C198 47 196 43 193 42"
+        fill="none"
+        stroke="#FFFFFF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        opacity="0.28"
+      />
+      {/* Tail shadow edge */}
+      <path
+        d="M186 79 C192 72 197 63 197 55 C197 49 195 44 192 43"
+        fill="none"
+        stroke="#B8A890"
+        strokeWidth="1.0"
+        strokeLinecap="round"
+        opacity="0.18"
+      />
+
+      {/* Akita fur texture hints — ruff, body, tail */}
+      {/* Ruff lines */}
+      <path d="M157 60 C159 56 163 54 166 55" fill="none" stroke="#FFFFFF" strokeWidth="0.7" strokeLinecap="round" opacity="0.18" />
+      <path d="M156 66 C158 62 163 60 167 61" fill="none" stroke="#FFFFFF" strokeWidth="0.6" strokeLinecap="round" opacity="0.14" />
+      <path d="M158 71 C161 67 166 66 170 67" fill="none" stroke="#FFFFFF" strokeWidth="0.6" strokeLinecap="round" opacity="0.12" />
+      {/* Tail fluff */}
+      <path d="M190 72 C194 67 197 60 197 54" fill="none" stroke="#FFFFFF" strokeWidth="0.6" strokeLinecap="round" opacity="0.15" />
+      <path d="M187 72 C191 67 194 59 194 53" fill="none" stroke="#F5F0E8" strokeWidth="0.5" strokeLinecap="round" opacity="0.20" />
+      {/* Body chest fluff */}
+      <path d="M167 72 C170 68 175 66 180 67" fill="none" stroke="#FFFFFF" strokeWidth="0.6" strokeLinecap="round" opacity="0.13" />
+      <path d="M165 80 C169 76 174 75 179 76" fill="none" stroke="#FFFFFF" strokeWidth="0.5" strokeLinecap="round" opacity="0.10" />
     </svg>
   );
 }
@@ -489,10 +843,10 @@ export function PhilanthropySection() {
                     className="mb-6 inline-block"
                     style={{
                       filter:
-                        'drop-shadow(0 0 18px rgba(197,149,107,0.22)) drop-shadow(0 0 40px rgba(197,149,107,0.08))',
+                        'drop-shadow(0 0 24px rgba(197,149,107,0.18)) drop-shadow(0 0 50px rgba(197,149,107,0.06))',
                     }}
                   >
-                    <DogSilhouette className="w-24 h-24 md:w-32 md:h-32" />
+                    <DogSilhouette className="w-48 h-28 md:w-64 md:h-40" />
                   </motion.div>
 
                   <h3 className="font-[family-name:var(--font-display)] text-2xl md:text-3xl text-rose-gold-light/80 italic mb-2">

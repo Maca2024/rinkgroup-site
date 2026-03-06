@@ -18,23 +18,55 @@ interface MarqueeBandProps {
   className?: string;
 }
 
-/** Glowing rose-gold dot separator rendered between each text repeat */
-function GlowDot() {
+/**
+ * Diamond ornament separator — a ◆ character flanked by rose-gold hair-lines
+ * that fade from the diamond outward to transparent.
+ */
+function DiamondSeparator() {
   return (
     <span
-      className="inline-block mx-10 align-middle"
+      className="inline-flex items-center mx-10 align-middle"
       aria-hidden="true"
-      style={{ lineHeight: 0 }}
+      style={{ verticalAlign: 'middle', lineHeight: 0 }}
     >
+      {/* Left hair-line — fades from transparent to rose-gold */}
       <span
         style={{
           display: 'inline-block',
-          width: '8px',
-          height: '8px',
-          borderRadius: '50%',
-          background: '#C5956B',
-          boxShadow:
-            '0 0 8px 2px rgba(197,149,107,0.8), 0 0 20px 6px rgba(197,149,107,0.35)',
+          width: '40px',
+          height: '1px',
+          background:
+            'linear-gradient(90deg, transparent 0%, rgba(197,149,107,0.55) 100%)',
+          verticalAlign: 'middle',
+        }}
+      />
+
+      {/* Diamond glyph */}
+      <span
+        style={{
+          display: 'inline-block',
+          fontSize: '0.65em',
+          lineHeight: 1,
+          color: '#C5956B',
+          textShadow:
+            '0 0 8px rgba(197,149,107,0.9), 0 0 20px rgba(197,149,107,0.45)',
+          margin: '0 8px',
+          verticalAlign: 'middle',
+          position: 'relative',
+          top: '-0.05em',
+        }}
+      >
+        ◆
+      </span>
+
+      {/* Right hair-line — fades from rose-gold to transparent */}
+      <span
+        style={{
+          display: 'inline-block',
+          width: '40px',
+          height: '1px',
+          background:
+            'linear-gradient(90deg, rgba(197,149,107,0.55) 0%, transparent 100%)',
           verticalAlign: 'middle',
         }}
       />
@@ -43,8 +75,9 @@ function GlowDot() {
 }
 
 /**
- * A single pass of the marquee content — text alternates between filled and
- * outline variants so the eye never locks onto a static repeat pattern.
+ * A single pass of the marquee content.
+ * Even indices render as a very subtle filled ghost; odd indices as a near-
+ * invisible outline — together they create an ethereal background texture.
  */
 function MarqueeSegment({
   text,
@@ -57,22 +90,22 @@ function MarqueeSegment({
   return (
     <>
       <span
-        className="font-[family-name:var(--font-display)] text-5xl md:text-7xl lg:text-[8rem] font-light tracking-tight"
+        className="font-[family-name:var(--font-display)] text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-[8rem] font-light tracking-[0.05em]"
         style={
           isOutline
             ? {
-                WebkitTextStroke: '1px #C5956B',
+                WebkitTextStroke: '0.5px rgba(197,149,107,0.15)',
                 WebkitTextFillColor: 'transparent',
                 color: 'transparent',
               }
             : {
-                color: '#C5956B',
+                color: 'rgba(197,149,107,0.12)',
               }
         }
       >
         {text}
       </span>
-      <GlowDot />
+      <DiamondSeparator />
     </>
   );
 }
@@ -87,7 +120,7 @@ export function MarqueeBand({
   const trackRef = useRef<HTMLSpanElement>(null);
   const { t } = useLanguage();
 
-  // --- Scroll-driven parallax for the whole band ---
+  // --- Scroll-driven parallax — reduced range for calmer movement ---
   const { scrollY, scrollYProgress } = useScroll({
     target: bandRef,
     offset: ['start end', 'end start'],
@@ -96,38 +129,35 @@ export function MarqueeBand({
   const parallaxY = useTransform(
     scrollYProgress,
     [0, 1],
-    reverse ? ['-12px', '12px'] : ['12px', '-12px']
+    reverse ? ['-6px', '6px'] : ['6px', '-6px']
   );
 
-  // --- Velocity-reactive speed ---
+  // --- Velocity-reactive speed — softened multiplier ---
   const rawVelocity = useVelocity(scrollY);
   const smoothVelocity = useSpring(rawVelocity, {
     stiffness: 50,
     damping: 20,
   });
 
-  /**
-   * We drive the CSS animation duration directly via a ref so we never
-   * trigger a React re-render on every frame. The base duration maps to
-   * the 40s defined in globals.css; faster scroll compresses it toward 8s.
-   */
   const [paused, setPaused] = useState(false);
 
+  /**
+   * Drive CSS animation duration directly via a DOM ref — no React re-renders
+   * on every frame. Base 80s; scroll velocity gently compresses toward 35s.
+   * Multiplier 0.006 vs the original 0.016 keeps the effect subtle.
+   */
   useAnimationFrame(() => {
     const el = trackRef.current;
     if (!el || paused) return;
 
     const absVel = Math.abs(smoothVelocity.get());
-    // Map 0 → 40s, 2000px/s → 8s (clamped)
-    const duration = Math.max(8, 40 - absVel * 0.016);
+    const duration = Math.max(35, 80 - absVel * 0.006);
     el.style.animationDuration = `${duration}s`;
 
     // Direction: reverse prop + scroll direction flip
     const goingDown = smoothVelocity.get() > 0;
     const shouldReverse = reverse ? !goingDown : goingDown;
-    el.style.animationDirection = shouldReverse
-      ? 'reverse'
-      : 'normal';
+    el.style.animationDirection = shouldReverse ? 'reverse' : 'normal';
   });
 
   const handleMouseEnter = useCallback(() => setPaused(true), []);
@@ -135,7 +165,7 @@ export function MarqueeBand({
 
   const displayText = textKey ? t[textKey] : (textProp ?? '');
 
-  // Repeat 8× so the seam is always off-screen at all viewport widths
+  // 8 repeats — seam always off-screen at any viewport width
   const REPEAT_COUNT = 8;
 
   return (
@@ -146,19 +176,18 @@ export function MarqueeBand({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Fade masks at left and right edges */}
+      {/* Fade masks — wider on desktop for a more gradual disappear */}
       <div className="relative">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 w-12 md:w-24 z-10"
+          className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-32 lg:w-48 z-10"
           style={{
-            background:
-              'linear-gradient(90deg, #080E1A 0%, transparent 100%)',
+            background: 'linear-gradient(90deg, #080E1A 0%, transparent 100%)',
           }}
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 w-12 md:w-24 z-10"
+          className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-32 lg:w-48 z-10"
           style={{
             background:
               'linear-gradient(270deg, #080E1A 0%, transparent 100%)',
@@ -167,9 +196,8 @@ export function MarqueeBand({
 
         <div className="whitespace-nowrap">
           {/*
-           * The track contains 2× the content so the CSS translateX(-50%)
-           * animation produces a seamless loop — identical to the original
-           * globals.css @keyframes marquee approach.
+           * The track holds 2× the content so the CSS translateX(-50%)
+           * animation produces a seamless loop matching the globals.css keyframe.
            */}
           <span
             ref={trackRef}
@@ -184,11 +212,7 @@ export function MarqueeBand({
             ))}
             {/* Second half — exact mirror so -50% translateX loops cleanly */}
             {Array.from({ length: REPEAT_COUNT }, (_, i) => (
-              <MarqueeSegment
-                key={`b-${i}`}
-                text={displayText}
-                index={i}
-              />
+              <MarqueeSegment key={`b-${i}`} text={displayText} index={i} />
             ))}
           </span>
         </div>

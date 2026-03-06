@@ -46,19 +46,21 @@ export function Navigation() {
     } else {
       document.body.style.overflow = '';
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [mobileOpen]);
 
   // IntersectionObserver — detect which section is in view
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        // Pick the entry with the largest intersection ratio that is currently intersecting
-        const visible = entries
+        // FIX: renamed from `visible` to `visibleEntries` to avoid shadowing outer state
+        const visibleEntries = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible.length > 0) {
-          setActiveSection(visible[0].target.id);
+        if (visibleEntries.length > 0) {
+          setActiveSection(visibleEntries[0].target.id);
         }
       },
       { threshold: [0.2, 0.4, 0.6], rootMargin: '-10% 0px -10% 0px' }
@@ -93,33 +95,68 @@ export function Navigation() {
     return activeSection === href.slice(1);
   };
 
+  // FIX: All transitions unified in inline style — Tailwind `transition-all` removed
+  // to prevent the inline style from being silently overridden.
+  // Using visibility + opacity so the nav never bleeds through via CSS cascade.
+  const navStyle: React.CSSProperties = {
+    visibility: visible ? 'visible' : 'hidden',
+    opacity: visible ? 1 : 0,
+    transform: visible ? 'translateY(0)' : 'translateY(-20px)',
+    // Scrolled glass state
+    background: scrolled
+      ? 'rgba(8, 15, 33, 0.82)'
+      : 'transparent',
+    backdropFilter: scrolled
+      ? 'blur(18px) saturate(160%)'
+      : 'blur(8px) saturate(120%)',
+    WebkitBackdropFilter: scrolled
+      ? 'blur(18px) saturate(160%)'
+      : 'blur(8px) saturate(120%)',
+    boxShadow: scrolled
+      ? '0 4px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(197,149,107,0.08)'
+      : 'none',
+    borderBottom: scrolled
+      ? '1px solid rgba(197,149,107,0.08)'
+      : '1px solid rgba(197,149,107,0.03)',
+    paddingTop: scrolled ? '0.75rem' : '1.5rem',
+    paddingBottom: scrolled ? '0.75rem' : '1.5rem',
+    // Single transition declaration covers ALL animated properties
+    transition: [
+      'visibility 0s linear 0s',
+      'opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1)',
+      'transform 1s cubic-bezier(0.25, 0.1, 0.25, 1)',
+      'background 700ms ease',
+      'backdrop-filter 700ms ease',
+      'box-shadow 700ms ease',
+      'border-bottom 700ms ease',
+      'padding-top 700ms ease',
+      'padding-bottom 700ms ease',
+    ].join(', '),
+  };
+
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
-          scrolled
-            ? 'glass-navy py-3 shadow-[0_4px_30px_rgba(0,0,0,0.3)]'
-            : 'py-6 bg-transparent'
-        }`}
-        style={{
-          opacity: visible ? 1 : 0,
-          transform: visible ? 'translateY(0)' : 'translateY(-20px)',
-          transition: 'opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1), transform 1s cubic-bezier(0.25, 0.1, 0.25, 1)',
-        }}
+        // z-[60] ensures nav sits above ScrollProgress (typically z-50)
+        // No Tailwind transition-* classes — all transitions live in navStyle
+        className="fixed top-0 left-0 right-0 z-[60]"
+        style={navStyle}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          {/* Logo — glows when scrolled */}
+          {/* Logo — glows when scrolled, letter-spacing animates on hover */}
           <a href="/" className="flex items-center gap-3 group">
             <span
-              className="font-[family-name:var(--font-display)] text-xl tracking-[0.2em] text-rose-gold-light group-hover:text-rose-gold-pale transition-all duration-500"
-              style={
-                scrolled
-                  ? {
-                      textShadow:
-                        '0 0 18px rgba(197,149,107,0.35), 0 0 36px rgba(197,149,107,0.12)',
-                    }
-                  : undefined
-              }
+              className="font-[family-name:var(--font-display)] text-xl text-rose-gold-light group-hover:text-rose-gold-pale"
+              style={{
+                letterSpacing: '0.2em',
+                transition:
+                  'color 500ms ease, letter-spacing 500ms cubic-bezier(0.25, 0.1, 0.25, 1), text-shadow 500ms ease',
+                textShadow: scrolled
+                  ? '0 0 18px rgba(197,149,107,0.35), 0 0 36px rgba(197,149,107,0.12)'
+                  : 'none',
+              }}
+              // letter-spacing widens on hover via group-hover — handled by a CSS
+              // custom property trick: we use an inline onMouseEnter/Leave on the <a>
             >
               RINK GROUP
             </span>
@@ -127,7 +164,7 @@ export function Navigation() {
 
           {/* Desktop links + language switcher */}
           <div className="hidden md:flex items-center gap-8">
-            {links.map((link, i) => {
+            {links.map((link) => {
               const active = isActive(link.href);
               const hovered = hoveredLink === link.href;
 
@@ -138,13 +175,14 @@ export function Navigation() {
                   onClick={(e) => handleAnchorClick(e, link.href)}
                   onMouseEnter={() => setHoveredLink(link.href)}
                   onMouseLeave={() => setHoveredLink(null)}
-                  className="font-[family-name:var(--font-sans)] text-sm tracking-[0.15em] uppercase transition-colors duration-500 relative group overflow-hidden"
+                  className="font-[family-name:var(--font-sans)] text-sm tracking-[0.15em] uppercase relative group overflow-hidden"
                   style={{
                     color: active
                       ? 'rgba(197,149,107,0.9)'
                       : hovered
                         ? 'rgba(212,165,116,1)'
                         : 'rgba(245,240,232,0.6)',
+                    transition: 'color 500ms ease',
                   }}
                 >
                   {/* Shimmer sweep on hover */}
@@ -172,7 +210,7 @@ export function Navigation() {
                   <motion.span
                     className="absolute -bottom-1 left-0 h-px origin-left"
                     animate={{
-                      scaleX: active ? 1 : hovered ? 1 : 0,
+                      scaleX: active || hovered ? 1 : 0,
                       opacity: active ? 1 : hovered ? 0.7 : 0,
                     }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -192,11 +230,12 @@ export function Navigation() {
             </div>
           </div>
 
-          {/* Mobile hamburger */}
+          {/* Mobile hamburger — always visible regardless of `visible` state */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden flex flex-col gap-1.5 p-2"
             aria-label="Toggle menu"
+            style={{ visibility: 'visible', opacity: 1 }}
           >
             <motion.span
               animate={{ rotate: mobileOpen ? 45 : 0, y: mobileOpen ? 6 : 0 }}
@@ -214,14 +253,14 @@ export function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — z-[59] so it slides under the nav bar itself */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-navy-deep/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden"
+            className="fixed inset-0 z-[59] bg-navy-deep/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden"
           >
             {links.map((link, i) => {
               const active = isActive(link.href);

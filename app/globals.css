@@ -104,7 +104,7 @@ html {
   100% { transform: translateX(-50%); }
 }
 .marquee-track {
-  animation: marquee 40s linear infinite;
+  animation: marquee 80s linear infinite;
 }
 .marquee-track:hover {
   animation-play-state: paused;

@@ -31,6 +31,7 @@ const notoArabic = Noto_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://rinkgroup-site.vercel.app'),
   title: 'Rink Group | Lumen Felicis',
   description: 'Strategic holding company bridging Nordic innovation with global ambition. Technology, AI consulting, adventure, and enterprise AI automation across Finland, Netherlands, and beyond.',
   openGraph: {
@@ -54,6 +55,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${playfair.variable} ${outfit.variable} ${notoArabic.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body className="bg-navy-deep text-cream antialiased noise-overlay">
         {children}
       </body>

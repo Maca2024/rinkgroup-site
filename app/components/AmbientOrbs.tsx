@@ -261,6 +261,7 @@ export function AmbientOrbs() {
   const mouseRef       = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
   const scrollRef      = useRef<number>(0);
   const wasMobileRef   = useRef<boolean | null>(null);
+  const visibleRef     = useRef<boolean>(true);
 
   // Shooting star scheduler
   const nextShootRef   = useRef<number>(0);
@@ -320,9 +321,21 @@ export function AmbientOrbs() {
     }
     window.addEventListener('scroll', onScroll, { passive: true });
 
+    // ── Visibility observer ───────────────────────────────────────────────────
+    const observer = new IntersectionObserver(
+      ([entry]) => { visibleRef.current = entry.isIntersecting; },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
     // ── Draw loop ─────────────────────────────────────────────────────────────
     function draw(timestamp: number) {
       if (!canvas || !ctx) return;
+
+      if (!visibleRef.current) {
+        rafRef.current = requestAnimationFrame(draw);
+        return;
+      }
 
       const W      = window.innerWidth;
       const H      = window.innerHeight;
@@ -580,6 +593,7 @@ export function AmbientOrbs() {
 
     return () => {
       cancelAnimationFrame(rafRef.current);
+      observer.disconnect();
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('scroll', onScroll);

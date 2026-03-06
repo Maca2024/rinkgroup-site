@@ -232,7 +232,7 @@ function PillarCard({
 
           {/* ── Body text ────────────────────────────────────────── */}
           <p
-            className={`col-span-12 md:col-span-5 font-[family-name:var(--font-serif)] text-base md:text-lg text-[#F5F0E8]/35 leading-relaxed group-hover:text-[#F5F0E8]/60 transition-colors duration-500 ${isRTL ? 'text-right' : ''}`}
+            className={`col-span-12 md:col-span-5 font-[family-name:var(--font-serif)] text-base md:text-lg text-[#F5F0E8]/50 leading-relaxed group-hover:text-[#F5F0E8]/70 transition-colors duration-500 ${isRTL ? 'text-right' : ''}`}
           >
             {pillar.body}
           </p>
@@ -245,7 +245,7 @@ function PillarCard({
             >
               <AnimatedStat value={pillar.stat} isHovered={isHovered} />
             </div>
-            <span className="block font-[family-name:var(--font-sans)] text-[9px] tracking-[0.3em] uppercase text-[#F5F0E8]/20 mt-2 group-hover:text-[#F5F0E8]/40 transition-colors duration-500">
+            <span className="block font-[family-name:var(--font-sans)] text-[9px] tracking-[0.3em] uppercase text-[#F5F0E8]/30 mt-2 group-hover:text-[#F5F0E8]/50 transition-colors duration-500">
               {pillar.statLabel}
             </span>
           </div>
@@ -285,7 +285,7 @@ export function PillarsSection() {
   });
 
   return (
-    <section id="ventures" className="relative py-20 md:py-40">
+    <section id="ventures" className="relative py-16 md:py-32">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* ── Dramatic header entrance ────────────────────────────── */}
@@ -295,7 +295,7 @@ export function PillarsSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.5em] uppercase text-[#C5956B]/40 block mb-5"
+            className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.5em] uppercase text-[#C5956B]/55 block mb-5"
           >
             {t.pillars.label}
           </motion.span>

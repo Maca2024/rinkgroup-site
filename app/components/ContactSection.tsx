@@ -397,7 +397,7 @@ export function ContactSection() {
   ];
 
   return (
-    <section id="contact" ref={ref} className="relative py-40 md:py-56 overflow-hidden">
+    <section id="contact" ref={ref} className="relative py-32 md:py-48 overflow-hidden">
 
       {/* Aurora bands */}
       <AuroraBackground />
@@ -434,7 +434,7 @@ export function ContactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.9 }}
-          className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.5em] uppercase text-rose-gold/40 block mb-8"
+          className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.5em] uppercase text-rose-gold/55 block mb-8"
         >
           {t.contact.label}
         </motion.span>
@@ -456,7 +456,7 @@ export function ContactSection() {
           whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          className="font-[family-name:var(--font-serif)] text-lg md:text-xl text-cream/30 max-w-md mx-auto mb-16"
+          className="font-[family-name:var(--font-serif)] text-lg md:text-xl text-cream/45 max-w-md mx-auto mb-16"
         >
           {t.contact.body}
         </motion.p>

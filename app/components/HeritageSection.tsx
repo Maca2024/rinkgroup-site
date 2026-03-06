@@ -294,11 +294,11 @@ function ValueCard({
         <span className="font-[family-name:var(--font-display)] text-2xl md:text-3xl text-rose-gold-light/80 italic block mb-1">
           {v.latin}
         </span>
-        <span className="font-[family-name:var(--font-sans)] text-[9px] tracking-[0.35em] uppercase text-cream/20 block mb-6">
+        <span className="font-[family-name:var(--font-sans)] text-[9px] tracking-[0.35em] uppercase text-cream/35 block mb-6">
           {v.english}
         </span>
         <p
-          className={`font-[family-name:var(--font-serif)] text-base md:text-lg text-cream/35 leading-relaxed group-hover:text-cream/60 transition-colors duration-500 ${isRTL ? 'text-right' : ''}`}
+          className={`font-[family-name:var(--font-serif)] text-base md:text-lg text-cream/50 leading-relaxed group-hover:text-cream/70 transition-colors duration-500 ${isRTL ? 'text-right' : ''}`}
         >
           {v.text}
         </p>
@@ -406,7 +406,7 @@ export function HeritageSection() {
     <section
       id="heritage"
       ref={sectionRef}
-      className="relative py-32 md:py-48 overflow-hidden"
+      className="relative py-24 md:py-40 overflow-hidden"
     >
       {/* Ambient floating dust */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
@@ -477,7 +477,7 @@ export function HeritageSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.5em] uppercase text-rose-gold/40 block mb-10 relative z-10"
+            className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.5em] uppercase text-rose-gold/55 block mb-10 relative z-10"
           >
             {t.heritage.label}
           </motion.span>
@@ -490,7 +490,7 @@ export function HeritageSection() {
             className="relative z-10"
           >
             <MottoWithLightSweep text={t.heritage.motto} />
-            <p className="font-[family-name:var(--font-serif)] text-lg md:text-xl text-cream/25 mt-6 tracking-wide">
+            <p className="font-[family-name:var(--font-serif)] text-lg md:text-xl text-cream/40 mt-6 tracking-wide">
               {t.heritage.mottoTranslation}
             </p>
           </motion.div>
@@ -560,7 +560,7 @@ export function HeritageSection() {
                     style={{ background: 'rgba(197,149,107,0.8)' }}
                   />
                 </div>
-                <span className="font-[family-name:var(--font-display)] text-base md:text-lg text-cream/20 hover:text-rose-gold/50 transition-colors duration-500">
+                <span className="font-[family-name:var(--font-display)] text-base md:text-lg text-cream/35 hover:text-rose-gold/50 transition-colors duration-500">
                   {city}
                 </span>
               </div>

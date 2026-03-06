@@ -66,14 +66,14 @@ export default function Home() {
           <HeroSection />
           <MarqueeBand
             textKey="marquee1"
-            className="text-rose-gold/[0.04] border-y border-rose-gold/[0.04]"
+            className="text-rose-gold/[0.05] border-y border-rose-gold/[0.05]"
           />
           <VisionSection />
           <SectionDivider variant="diamond" />
           <MarqueeBand
             textKey="marquee2"
             reverse
-            className="text-cream/[0.03]"
+            className="text-cream/[0.04]"
           />
           <PillarsSection />
           <SectionDivider variant="lines" />

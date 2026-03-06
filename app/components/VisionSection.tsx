@@ -214,7 +214,7 @@ export function VisionSection() {
           style={{ opacity: labelOpacity, y: labelY }}
           className={`mb-10 ${isRTL ? 'text-right' : ''}`}
         >
-          <span className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.5em] uppercase text-[#C5956B]/40">
+          <span className="font-[family-name:var(--font-sans)] text-[10px] tracking-[0.5em] uppercase text-[#C5956B]/55">
             {t.vision.label}
           </span>
         </motion.div>

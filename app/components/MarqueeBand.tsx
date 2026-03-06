@@ -94,12 +94,12 @@ function MarqueeSegment({
         style={
           isOutline
             ? {
-                WebkitTextStroke: '0.5px rgba(197,149,107,0.15)',
+                WebkitTextStroke: '0.5px rgba(197,149,107,0.19)',
                 WebkitTextFillColor: 'transparent',
                 color: 'transparent',
               }
             : {
-                color: 'rgba(197,149,107,0.12)',
+                color: 'rgba(197,149,107,0.15)',
               }
         }
       >

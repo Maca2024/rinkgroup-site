@@ -75,7 +75,7 @@ export function Footer() {
                 }}
                 transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
               />
-              <span className="font-[family-name:var(--font-serif)] text-[10px] tracking-[0.15em] text-cream/10 italic">
+              <span className="font-[family-name:var(--font-serif)] text-[10px] tracking-[0.15em] text-cream/20 italic">
                 Lumen Felicis
               </span>
             </div>
@@ -86,7 +86,7 @@ export function Footer() {
             {['Helsinki', 'Amsterdam', 'Kuusamo'].map((city, i) => (
               <div key={city} className="flex items-center gap-3 md:gap-5">
                 <motion.span
-                  className="text-cream/10 cursor-default"
+                  className="text-cream/20 cursor-default"
                   whileHover={{
                     color: 'rgba(197,149,107,0.5)',
                     textShadow: '0 0 14px rgba(197,149,107,0.35)',
@@ -106,7 +106,7 @@ export function Footer() {
           <div className="flex items-center gap-4">
             {/* Copyright with shimmer on hover */}
             <motion.span
-              className="font-[family-name:var(--font-sans)] text-[9px] tracking-[0.15em] text-cream/10 relative overflow-hidden"
+              className="font-[family-name:var(--font-sans)] text-[9px] tracking-[0.15em] text-cream/20 relative overflow-hidden"
               whileHover={{ color: 'rgba(197,149,107,0.3)' }}
               transition={{ duration: 0.4 }}
             >

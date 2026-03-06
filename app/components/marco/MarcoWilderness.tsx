@@ -74,9 +74,9 @@ function AuroraCanvas() {
         ctx.closePath();
 
         const grad = ctx.createLinearGradient(0, baseY - amplitude, 0, baseY + amplitude * 3);
-        grad.addColorStop(0, `hsla(${hue}, 80%, 55%, ${0.02 + Math.sin(t * 0.5 + curtain) * 0.01})`);
-        grad.addColorStop(0.3, `hsla(${hue}, 70%, 50%, ${0.04 + Math.sin(t * 0.3 + curtain) * 0.02})`);
-        grad.addColorStop(0.6, `hsla(${hue + 20}, 60%, 45%, ${0.02 + Math.sin(t * 0.7 + curtain) * 0.01})`);
+        grad.addColorStop(0, `hsla(${hue}, 80%, 55%, ${0.05 + Math.sin(t * 0.5 + curtain) * 0.025})`);
+        grad.addColorStop(0.3, `hsla(${hue}, 70%, 50%, ${0.08 + Math.sin(t * 0.3 + curtain) * 0.03})`);
+        grad.addColorStop(0.6, `hsla(${hue + 20}, 60%, 45%, ${0.04 + Math.sin(t * 0.7 + curtain) * 0.02})`);
         grad.addColorStop(1, 'transparent');
 
         ctx.fillStyle = grad;
@@ -92,33 +92,95 @@ function AuroraCanvas() {
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = `hsla(${hue}, 90%, 65%, ${0.06 + Math.sin(t + curtain) * 0.03})`;
+        ctx.strokeStyle = `hsla(${hue}, 90%, 65%, ${0.10 + Math.sin(t + curtain) * 0.05})`;
         ctx.lineWidth = 1.5;
         ctx.stroke();
       }
 
-      // === TREELINE SILHOUETTE ===
+      // === TREELINE SILHOUETTE — 3 depth layers ===
+      const treeLine = h * 0.7;
+
+      // --- Back layer (distant trees, lightest, aurora bleed-through) ---
       ctx.beginPath();
       ctx.moveTo(0, h);
-
-      const treeLine = h * 0.7;
       for (let x = 0; x <= w; x += 1) {
-        // Procedural treeline
-        const treeNoise = Math.sin(x * 0.02) * 20 +
-          Math.sin(x * 0.05) * 10 +
-          Math.sin(x * 0.15) * 5;
-
-        // Individual tree spikes
-        const treeSpike = Math.abs(Math.sin(x * 0.08)) ** 3 * 40;
-
-        const y = treeLine + treeNoise - treeSpike;
-        ctx.lineTo(x, y);
+        const noise = Math.sin(x * 0.012) * 28 + Math.sin(x * 0.035) * 14;
+        const spike = Math.abs(Math.sin(x * 0.055 + 1.2)) ** 3 * 50;
+        ctx.lineTo(x, treeLine - 30 + noise - spike);
       }
-
       ctx.lineTo(w, h);
       ctx.closePath();
-      ctx.fillStyle = '#040808';
+      // Dark forest green with subtle aurora tint
+      const backGrad = ctx.createLinearGradient(0, treeLine - 80, 0, h);
+      backGrad.addColorStop(0, `rgba(16, 38, 28, ${0.75 + Math.sin(t * 0.4) * 0.05})`);
+      backGrad.addColorStop(0.3, 'rgba(12, 28, 20, 0.88)');
+      backGrad.addColorStop(1, 'rgba(8, 18, 14, 0.95)');
+      ctx.fillStyle = backGrad;
       ctx.fill();
+
+      // Aurora glow bleeding through the back treeline gaps
+      for (let x = 0; x < w; x += 60 + Math.sin(x * 0.01) * 20) {
+        const gapWidth = 8 + Math.sin(x * 0.03 + t * 0.2) * 4;
+        const gapY = treeLine - 20 + Math.sin(x * 0.02) * 15;
+        const auroraHue = 130 + Math.sin(t * 0.3 + x * 0.005) * 40;
+        const glow = ctx.createRadialGradient(x, gapY, 0, x, gapY, gapWidth * 4);
+        glow.addColorStop(0, `hsla(${auroraHue}, 70%, 50%, ${0.04 + Math.sin(t * 0.5 + x * 0.01) * 0.02})`);
+        glow.addColorStop(1, 'transparent');
+        ctx.fillStyle = glow;
+        ctx.fillRect(x - gapWidth * 4, gapY - gapWidth * 4, gapWidth * 8, gapWidth * 8);
+      }
+
+      // --- Mid layer (main forest, 33% lighter than original #040808) ---
+      ctx.beginPath();
+      ctx.moveTo(0, h);
+      for (let x = 0; x <= w; x += 1) {
+        const noise = Math.sin(x * 0.02) * 20 + Math.sin(x * 0.05) * 10 + Math.sin(x * 0.15) * 5;
+        const spike = Math.abs(Math.sin(x * 0.08)) ** 3 * 40;
+        ctx.lineTo(x, treeLine + noise - spike);
+      }
+      ctx.lineTo(w, h);
+      ctx.closePath();
+      // #040808 → 33% lighter ≈ #0E2218 dark forest green
+      const midGrad = ctx.createLinearGradient(0, treeLine - 40, 0, h);
+      midGrad.addColorStop(0, '#0E2218');
+      midGrad.addColorStop(0.5, '#0A1A12');
+      midGrad.addColorStop(1, '#07120D');
+      ctx.fillStyle = midGrad;
+      ctx.fill();
+
+      // Subtle edge highlights on mid-layer tree tips (moonlight / aurora rim)
+      ctx.beginPath();
+      for (let x = 0; x <= w; x += 1) {
+        const noise = Math.sin(x * 0.02) * 20 + Math.sin(x * 0.05) * 10 + Math.sin(x * 0.15) * 5;
+        const spike = Math.abs(Math.sin(x * 0.08)) ** 3 * 40;
+        const y = treeLine + noise - spike;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(80, 180, 120, ${0.04 + Math.sin(t * 0.6) * 0.02})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // --- Front layer (closest trees, darkest, adds depth) ---
+      ctx.beginPath();
+      ctx.moveTo(0, h);
+      for (let x = 0; x <= w; x += 1) {
+        const noise = Math.sin(x * 0.025 + 0.5) * 15 + Math.sin(x * 0.07) * 8;
+        const spike = Math.abs(Math.sin(x * 0.1 + 0.3)) ** 3 * 35;
+        ctx.lineTo(x, treeLine + 30 + noise - spike);
+      }
+      ctx.lineTo(w, h);
+      ctx.closePath();
+      ctx.fillStyle = '#081410';
+      ctx.fill();
+
+      // Ground fog — ethereal mist between forest and viewer
+      const fogGrad = ctx.createLinearGradient(0, h * 0.85, 0, h);
+      fogGrad.addColorStop(0, 'transparent');
+      fogGrad.addColorStop(0.5, `rgba(12, 30, 22, ${0.06 + Math.sin(t * 0.2) * 0.03})`);
+      fogGrad.addColorStop(1, `rgba(6, 10, 16, ${0.15 + Math.sin(t * 0.15) * 0.05})`);
+      ctx.fillStyle = fogGrad;
+      ctx.fillRect(0, h * 0.75, w, h * 0.25);
 
       // === SNOWFLAKES ===
       for (const flake of snowflakes) {
